@@ -9,4 +9,4 @@ const HeaderCartButton = () => {
         </button>
     );
 }
-export default HeaderCartButton
+export default HeaderCartButton;
