@@ -35,3 +35,9 @@
   .button:active .badge {
     background-color: #92320c;
   }
+  .count {
+    padding: 4px 8px;
+    margin: 8px;
+    background-color:#4d1601;
+    border-radius: 30px;
+  }
