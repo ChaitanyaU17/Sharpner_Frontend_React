@@ -1,47 +1,43 @@
+import { useRef, useState } from 'react';
 import classes from './MealItemForm.module.css';
 import Input from '../../UI/Input';
-import { useContext } from 'react';
-import CartContext from '../../../utils/cartContext';
 
 const MealItemForm = (props) => {
-  const cartCtx = useContext(CartContext); 
+  const [amountIsValid, setAmountIsValid] = useState(true);
 
-  const amountChangeHandler = (event) => {
-    const enteredAmount = event.target.value;
-    // Validate or process the entered amount here
-    console.log("Entered amount:", enteredAmount); 
-  };
+  const amountInputRef = useRef();
 
-  const addToCartHandler = (event) => {
-    event.preventDefault(); 
-    const enteredAmount = parseInt(cartCtx.amountChangeHandler); // Get and convert amount
+  const submitHandler = event => {
+    event.preventDefault();
 
-    // Add item to cart using cart context functions (assuming functions exist)
-    cartCtx.addItem({
-      id: props.id, // Assuming ID is passed as a prop
-      name: props.name, // Assuming name is passed as a prop
-      amount: enteredAmount,
-      price: props.price, // Assuming price is passed as a prop
-    });
+    const enteredAmount = amountInputRef.current.value;
+    const enteredAmountNumber = +enteredAmount;
+
+    if (enteredAmount.trim().length === 0 || enteredAmountNumber < 1 || enteredAmountNumber > 5)  {
+      setAmountIsValid(false);
+      return;
+    }
+    props.onAddToCart(enteredAmountNumber)
   };
 
   return (
-    <form className={classes.form}>
+     <form className={classes.form} onSubmit={submitHandler}>
       <Input
-        label='Amount'
-        input={{
-          id: 'amount',
-          type: 'number',
-          min: '1',
-          max: '5',
-          step: '1',
-          defaultValue: '1',
-          onChange: amountChangeHandler, 
-        }}
+       ref={amountInputRef}
+       label='Amount'
+       input={{
+         id: 'amount',
+         type: 'number',
+         min: '1',
+         max: '5',
+         step: '1',
+         defaultValue: '1',
+       }}
       />
-      <button onClick={addToCartHandler}>+ Add</button>
-    </form>
+       <button>+ Add</button>
+       {!amountIsValid && <p>please enter a valid amount (1-5)!</p>}
+     </form>
   );
-};
+}
 
 export default MealItemForm;
