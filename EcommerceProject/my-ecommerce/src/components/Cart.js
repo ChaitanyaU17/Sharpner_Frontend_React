@@ -1,69 +1,36 @@
-import React from 'react'
-import CartItems from './CartItems'
+// Cart.js
+import React, { useContext } from 'react';
+import { CartContext } from '../utils/CartContext';
+import CartItems from './CartItems';
+import './Cart.css'; 
 
-const cartElements = [
+const Cart = () => {
+  const { cartItems, getTotalPrice, cartVisible, toggleCartVisibility } = useContext(CartContext);
 
-    {
-    
-    title: 'Colors',
-    
-    price: 100,
-    
-    imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%201.png',
-    
-    quantity: 2,
-    
-    },
-    
-    {
-    
-    title: 'Black and white Colors',
-    
-    price: 50,
-    
-    imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%202.png',
-    
-    quantity: 3,
-    
-    },
-    
-    {
-    
-    title: 'Yellow and Black Colors',
-    
-    price: 70,
-    
-    imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%203.png',
-    
-    quantity: 1,
-    
-    }
-    
-    ]
+  const total = getTotalPrice();
 
-    const Cart = () => {
-      const total = cartElements.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
-      );
-
-      return (
-        <div className="container my-5">
-          <h1 className="text-center mb-4">CART</h1>
-          <div className="cart-items">
-            {cartElements.map((item, index) => (
-              <CartItems key={index} item={item} />
-            ))}
-          </div>
-          <div className="d-flex justify-content-between align-items-center border-top pt-3">
-            <span className="h5">Total</span>
-            <span className="h5">${total.toFixed(2)}</span>
-          </div>
-          <button className="btn btn-primary btn-lg btn-block ml-8">
+  return (
+    <div className={`cart-overlay ${cartVisible ? 'visible' : ''}`}>
+      <div className="cart-container">
+        <button className="close-btn" onClick={toggleCartVisibility}>X</button>
+        <h1 className="text-center mb-4">CART</h1>
+        <div className="cart-items">
+          {cartItems.map((item, index) => (
+            <CartItems key={index} item={item} />
+          ))}
+        </div>
+        <div className="d-flex justify-content-between align-items-center border-top pt-3">
+          <span className="h5">Total</span>
+          <span className="h5">${total.toFixed(2)}</span>
+        </div>
+        <div className="d-flex justify-content-center">
+          <button className="btn btn-info btn-lg btn-block text-white mt-4">
             PURCHASE
           </button>
         </div>
-      );
-    };
+      </div>
+    </div>
+  );
+};
 
-export default Cart
+export default Cart;
