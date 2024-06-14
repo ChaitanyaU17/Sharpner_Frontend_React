@@ -1,4 +1,3 @@
-// CartItems.js
 import React, { useContext } from 'react';
 import { CartContext } from '../utils/CartContext';
 
@@ -32,6 +31,7 @@ const CartItems = ({ item }) => {
               className="form-control form-control-sm w-50"
               value={item.quantity}
               min="1"
+              readOnly
             />
             <button 
               className="btn btn-danger btn-sm m-2 ml-2"

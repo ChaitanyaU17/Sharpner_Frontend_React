@@ -1,4 +1,3 @@
-// Cart.js
 import React, { useContext } from 'react';
 import { CartContext } from '../utils/CartContext';
 import CartItems from './CartItems';
