@@ -32,6 +32,9 @@ const productsArr = [
 const Store = () => {
   return (
     <div className='container mt-4'>
+      <div >
+      <h1 className='d-flex justify-content-center'>The Generics</h1>
+      </div>
       <div className='row'>
         {productsArr.map((product, index) => (
             <ProductCard key={index} product={product} />

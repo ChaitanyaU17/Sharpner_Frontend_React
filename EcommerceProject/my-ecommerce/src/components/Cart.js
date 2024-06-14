@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { CartContext } from '../utils/CartContext';
 import CartItems from './CartItems';
-import './Cart.css'; 
+import './Cart.css';
 
 const Cart = () => {
   const { cartItems, getTotalPrice, cartVisible, toggleCartVisibility } = useContext(CartContext);
@@ -11,7 +11,7 @@ const Cart = () => {
   return (
     <div className={`cart-overlay ${cartVisible ? 'visible' : ''}`}>
       <div className="cart-container">
-        <button className="close-btn" onClick={toggleCartVisibility}>X</button>
+        <button className="close-btn border border-info" onClick={toggleCartVisibility}>X</button>
         <h1 className="text-center mb-4">CART</h1>
         <div className="cart-items">
           {cartItems.map((item, index) => (
