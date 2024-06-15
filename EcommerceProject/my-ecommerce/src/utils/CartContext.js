@@ -33,7 +33,7 @@ const CartProvider = ({ children }) => {
   };
 
   const removeItemFromCart = (itemId) => {
-    setCartItems(cartItems.filter((item) => item.id !== itemId));
+    setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
   };
 
   const getTotalPrice = () => {

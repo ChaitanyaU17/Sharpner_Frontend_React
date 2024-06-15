@@ -6,7 +6,6 @@ const ProductCard = ({ product }) => {
 
   return (
     <div className="mb-4 mt-5" style={{ maxWidth: '270px', marginLeft: '182px'}}>
-     
       <div className="card" style={{ maxHeight: '400px'} }>
         <img
           src={product.imageUrl}

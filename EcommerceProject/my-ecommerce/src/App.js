@@ -4,8 +4,9 @@ import './App.css';
 import Cart from './components/Cart';
 import Header from './components/Header';
 import Store from './components/Store';
-import About from './components/About'; // Import the About component
+import About from './components/About';
 import { CartProvider } from './utils/CartContext';
+import Home from './components/Home';
 
 function App() {
   return (
@@ -13,7 +14,8 @@ function App() {
       <Router>
         <Header />
         <Routes>
-          <Route path="/" element={<Store />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/store" element={<Store />} />
           <Route path="/about" element={<About />} />
         </Routes>
