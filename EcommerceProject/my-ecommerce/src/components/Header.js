@@ -42,6 +42,7 @@ const Header = () => {
                 ABOUT
               </NavLink>
             </li>
+<<<<<<< HEAD
             <li className="mx-5">
               <NavLink
                 to="/contact"
@@ -51,6 +52,8 @@ const Header = () => {
                 Contact Us
               </NavLink>
             </li>
+=======
+>>>>>>> 07d4ed887a16f52ce0e1828cd7ff90e7980a49f0
           </ul>
           <button
             className="border border-primary mt-1 rounded bg-black text-white mx-5"
