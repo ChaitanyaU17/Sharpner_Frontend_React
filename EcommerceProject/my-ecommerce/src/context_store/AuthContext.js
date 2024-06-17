@@ -5,6 +5,7 @@ const AuthContext = React.createContext({
   userLoggedIn: false,
   useremail:"",
   login: id => {},
+  logout: id => {}
 });
 
 export const AuthContextProvider = props => {
@@ -21,7 +22,15 @@ export const AuthContextProvider = props => {
     setTokenId(id);
     setemailId(email);
   };
- 
+
+  //Implementing Logout functionality 
+
+  const logoutHandler = id => {
+    localStorage.clear("idToken");
+    localStorage.clear('email')
+    setTokenId(null);
+    setemailId('');
+  };
 
   const userLoggedInHanlder = idTokenLocal ? true : false;
   const authValue = {
@@ -29,7 +38,7 @@ export const AuthContextProvider = props => {
     userLoggedIn: userLoggedInHanlder,
     useremail: email,
     login: loginHandler,
-   
+    logout: logoutHandler
   };
   return (
     <AuthContext.Provider value={authValue}>
