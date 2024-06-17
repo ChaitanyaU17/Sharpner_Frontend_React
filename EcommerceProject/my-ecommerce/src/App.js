@@ -16,6 +16,8 @@ import ContactUS from "./components/ContactUs"
 import AuthForm from "./Auth/AuthForm"
 import AuthContext from "./context_store/AuthContext";
 import { useContext } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 function App() {
   const Store = lazy(()=>import('./components/Store'));
   const ProductDetailPage = lazy(()=>import('./components/ProductDetailPage'));

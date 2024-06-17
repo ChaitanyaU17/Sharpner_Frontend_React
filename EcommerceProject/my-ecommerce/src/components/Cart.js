@@ -1,42 +1,30 @@
-import React, { useContext } from 'react';
-import CartContext from '../context_store/Cart_Context';
-import CartItems from './CartItems';
-
-const Cart = () => {
-  const { cartItems, getTotalPrice, cartVisible, toggleCartVisibility } = useContext(CartContext);
-
-  const total = getTotalPrice();
-
+import { Button, Offcanvas } from "react-bootstrap";
+import { TableComponent } from '../Layout/Table'
+import CartContext from "../context_store/Cart_Context";
+import { useContext } from "react";
+const Cart = props => {
+  const ctx = useContext(CartContext);
+  
   return (
-    <div className={`modal fade ${cartVisible ? 'show d-block' : 'd-none'}`}>
-      <div className="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">Cart</h5>
-            <div style={{ marginLeft: '660px'}}>
-            <button type="button" className="close"  onClick={toggleCartVisibility}>
-            <span>&times;</span>
-            </button>
-            </div>
-          </div>
-          <div className="modal-body">
-            <div className="list-group">
-              {cartItems.map((item, index) => (
-                <CartItems key={index} item={item} />
-              ))}
-            </div>
-          </div>
-          <div className="modal-footer d-flex justify-content-between">
-            <span className="h5">Total</span>
-            <span className="h5">${total.toFixed(2)}</span>
-            <button className="btn btn-info btn-lg" onClick={toggleCartVisibility}>
-              Purchase
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Offcanvas show={props.show} onHide={props.handleClose} placement="end">
+      <Offcanvas.Header closeButton>
+        <Offcanvas.Title>CART</Offcanvas.Title>
+      </Offcanvas.Header>
+      <Offcanvas.Body>
+        <TableComponent data={ctx.items} amount={ctx.totalAmount}>
+        <thead>
+          <tr>
+            <th className="text-center">Image</th>
+            <th className="text-center">Title</th>
+            
+            <th className="text-center">Quantity</th>
+            <th className="text-center">Price</th>
+            </tr>
+        </thead>
+        </TableComponent>
+        <Button variant="info" className="w-100" >PURCHASE</Button>
+      </Offcanvas.Body>
+    </Offcanvas>
   );
 };
-
 export default Cart;
