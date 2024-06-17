@@ -14,7 +14,7 @@ export const AuthContextProvider = props => {
   const [tokenId, setTokenId] = useState(idTokenLocal);
   const [email, setemailId] = useState(userEmailLocal);
   
-
+//auto logout
   const loginHandler = (id,email) => {
     localStorage.setItem("idToken", JSON.stringify(id));
     localStorage.setItem('email',email)

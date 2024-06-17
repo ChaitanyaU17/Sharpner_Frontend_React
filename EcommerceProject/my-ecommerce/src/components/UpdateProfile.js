@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState, useRef } from "react";
 import { Form, Col, Row, Button } from "react-bootstrap";
 import AuthContext from "../context_store/AuthContext";
+import { API_KEY } from "../utils/constants";
+
 const Profile = () => {
   const ctx = useContext(AuthContext);
   const [email, setEmail] = useState("");
@@ -10,7 +12,7 @@ const Profile = () => {
   useEffect(
     () => {
       fetch(
-        "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyBpizCbmrFkRBRX0P2hiFvi9vmlZ5RTjkI",
+        `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`,
         {
           method: "POST",
           headers: {
@@ -34,7 +36,7 @@ const Profile = () => {
   );
   const changePasswordHandler = async () => {
     const response = await fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyBpizCbmrFkRBRX0P2hiFvi9vmlZ5RTjkI",
+      `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`,
       {
         method: "POST",
         headers: {
