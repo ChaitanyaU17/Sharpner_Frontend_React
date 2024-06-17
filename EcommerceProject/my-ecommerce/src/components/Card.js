@@ -1,34 +1,28 @@
-// import { Card, Button } from "react-bootstrap";
-// import { useContext } from "react";
-// import { Link } from "react-router-dom";
-// import CartContext from "../context_store/Cart_Context";
-// const GenricsCard = props => {
-//   const ctx = useContext(CartContext);
-//   return (
-//     <div className="d-flex justify-content-around">
-//       <Card border="light">
-//         <Card.Header className="text-center">
-//           {props.title}
-//         </Card.Header>
-//         <Card.Body>
-//           <Link to={`/product-detail/${props.id}`}>
-//             <Card.Img className=" h-50 " src={props.imageUrl} />
-//           </Link>
-//           <Card.Text className="text-center">
-//             Price: $ {props.price}
-//           </Card.Text>
+import React from 'react';
+import { Card, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
-//           <Button
-//             className="w-100"
-//             variant="info"
-//             onClick={() => ctx.addItem(props)}
-//           >
-//             Add to Cart
-//           </Button>
-//         </Card.Body>
-//       </Card>
-//     </div>
-//   );
-// };
+const GenricsCard = ({ title, id, price, imageUrl }) => {
+  const navigate = useNavigate();
 
-// export default GenricsCard;
+  const handleCardClick = () => {
+    navigate(`/products/${id}`);
+  };
+
+  return (
+    <Card style={{ width: '18rem', margin: '1rem' }} onClick={handleCardClick}>
+      <Card.Img variant="top" src={imageUrl} alt={title} />
+      <Card.Body>
+        <Card.Title>{title}</Card.Title>
+        <Card.Text>
+          ${price}
+        </Card.Text>
+        <div className='d-flex justify-content-center'>
+        <Button  variant="info" onClick={handleCardClick}>View Details</Button>
+        </div>
+      </Card.Body>
+    </Card>
+  );
+};
+
+export default GenricsCard;

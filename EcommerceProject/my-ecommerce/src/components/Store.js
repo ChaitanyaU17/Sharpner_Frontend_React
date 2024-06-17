@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { DropdownButton, Dropdown, Button } from 'react-bootstrap';
-import GenricsCard from './GenricsCard'; // Import the GenricsCard component
+import GenricsCard from './Card'; 
 
 const Store = () => {
   const [products, setProducts] = useState([]);
   const [pageCount, setPageCount] = useState(1);
   const [categories, setCategories] = useState([]);
+
+  console.log(categories);
   
   useEffect(() => {
     fetch("https://dummyjson.com/products")
@@ -25,7 +27,7 @@ const Store = () => {
   const queryParams = new URLSearchParams(location.search);
   
   const handleCategoryChange = category => {
-    navigate(`/store?name=${category}`);
+    navigate(`/store?name=${category.slug}`);
   };
 
   return (
@@ -39,7 +41,7 @@ const Store = () => {
       >
         {categories.map((category, index) => (
           <Dropdown.Item key={index} onClick={() => handleCategoryChange(category)}>
-            {category}
+            {category.name}
           </Dropdown.Item>
         ))}
       </DropdownButton>
