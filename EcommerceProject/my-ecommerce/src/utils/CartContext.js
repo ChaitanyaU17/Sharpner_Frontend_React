@@ -1,49 +1,59 @@
-import React, { createContext, useState, useCallback, useMemo } from 'react';
+import React, { createContext, useState } from 'react';
 
-const CartContext = createContext();
+const CartContext = createContext({
+  cartItems: [],
+  cartVisible: false,
+  toggleCartVisibility: () => {},
+  addItemToCart: (item) => {},
+  removeItemFromCart: (itemId) => {},
+  getTotalPrice: () => 0,
+});
 
-export const CartContextProvider = ({ children }) => {
+const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [cartVisible, setCartVisible] = useState(false);
 
-  const toggleCartVisibility = useCallback(() => {
-    setCartVisible(prevVisible => !prevVisible);
-  }, []);
+  const toggleCartVisibility = () => {
+    setCartVisible(!cartVisible);
+  };
 
-  const addItemToCart = useCallback((item) => {
+  const addItemToCart = (item) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find((cartItem) => cartItem.id === item.id);
       if (existingItem) {
         return prevItems.map((cartItem) =>
-          cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity + item.quantity } : cartItem
+          cartItem.id === item.id
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem
         );
+      } else {
+        return [...prevItems, { ...item, quantity: 1 }];
       }
-      return [...prevItems, item];
     });
-  }, []);
+  };
 
-  const removeItemFromCart = useCallback((id) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
-  }, []);
+  const removeItemFromCart = (itemId) => {
+    setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+  };
 
-  const getTotalPrice = useCallback(() => {
-    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-  }, [cartItems]);
-
-  const value = useMemo(() => ({
-    cartItems,
-    addItemToCart,
-    removeItemFromCart,
-    getTotalPrice,
-    cartVisible,
-    toggleCartVisibility
-  }), [cartItems, addItemToCart, removeItemFromCart, getTotalPrice, cartVisible, toggleCartVisibility]);
+  const getTotalPrice = () => {
+    return cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  };
 
   return (
-    <CartContext.Provider value={value}>
+    <CartContext.Provider
+      value={{
+        cartItems,
+        cartVisible,
+        toggleCartVisibility,
+        addItemToCart,
+        removeItemFromCart,
+        getTotalPrice,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
 };
 
-export default CartContext;
+export { CartContext, CartProvider };

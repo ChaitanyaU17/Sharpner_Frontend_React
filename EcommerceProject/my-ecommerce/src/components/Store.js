@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from "react";
-import ProductCard from "./ProductCard";
-import { Dropdown, DropdownButton, Button } from "react-bootstrap";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { DropdownButton, Dropdown, Button } from 'react-bootstrap';
+import GenricsCard from './GenricsCard'; // Import the GenricsCard component
 
 const Store = () => {
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [pageCount, setPageCount] = useState(1);
-  const history = useNavigate();
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-
+  const [categories, setCategories] = useState([]);
+  
   useEffect(() => {
     fetch("https://dummyjson.com/products")
       .then(data => data.json())
@@ -23,12 +20,16 @@ const Store = () => {
       .then(data => setCategories(data));
   }, []);
 
-  const QueryHandler = (category) => {
-    history(`/store?name=${category}`);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  
+  const handleCategoryChange = category => {
+    navigate(`/store?name=${category}`);
   };
 
   return (
-    <div className='container mt-4'>
+    <div>
       <h1 className="text-center">PRODUCTS</h1>
       <DropdownButton
         id="dropdown-basic-button"
@@ -36,31 +37,40 @@ const Store = () => {
         className="m-2"
         variant="info"
       >
-        {categories.map((item, index) => (
-          <Dropdown.Item key={index} onClick={() => QueryHandler(item)}>
-            {item}
+        {categories.map((category, index) => (
+          <Dropdown.Item key={index} onClick={() => handleCategoryChange(category)}>
+            {category}
           </Dropdown.Item>
         ))}
       </DropdownButton>
-      <div className='row'>
+      <div className="row" style={{marginLeft: '200px'}}>
         {queryParams.get("name") === null &&
           products.slice(0, pageCount * 10).map((product) => (
             <div className="col-6" key={product.id}>
-              <ProductCard product={product} />
+              <GenricsCard
+                title={product.title}
+                id={product.id}
+                price={product.price}
+                imageUrl={product.thumbnail}
+              />
             </div>
           ))}
         {queryParams.get("name") !== null &&
           products
-            .filter((product) => product.category === queryParams.get("name"))
+            .filter(product => product.category === queryParams.get("name"))
             .map((product) => (
               <div className="col-6" key={product.id}>
-                <ProductCard product={product} />
+                <GenricsCard
+                  title={product.title}
+                  id={product.id}
+                  price={product.price}
+                  imageUrl={product.thumbnail}
+                />
               </div>
             ))}
       </div>
       <div className="d-flex justify-content-center">
         {(pageCount + 1) * 10 <= products.length &&
-          pageCount * 10 < products.length &&
           queryParams.get("name") === null && (
             <Button
               variant="secondary"
