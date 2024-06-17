@@ -1,28 +1,25 @@
 import React, { useContext } from "react";
-import { CartContext } from '../utils/CartContext';
+import { Card, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import CartContext from "../utils/CartContext";
 
 const ProductCard = ({ product }) => {
   const { addItemToCart } = useContext(CartContext);
 
   return (
-    <div className="mb-4 mt-5" style={{ maxWidth: '270px', marginLeft: '182px'}}>
-      <div className="card" style={{ maxHeight: '400px'} }>
-        <img
-          src={product.imageUrl}
-          className="card-img-top"
-          alt={product.title}
-        />
-        <div className="card-body">
-          <h6 className="card-title">{product.title}</h6>
-          <p className="card-text">${product.price}</p>
-          <button 
-            className="btn btn-primary"
-            onClick={() => addItemToCart(product)}
-          >
+    <div className="mb-4 mt-5" style={{ maxWidth: '270px', marginLeft: '182px' }}>
+      <Card border="light" style={{ maxHeight: '400px' }}>
+        <Card.Header className="text-center">{product.title}</Card.Header>
+        <Card.Body>
+          <Link to={`/product-detail/${product.id}`}>
+            <Card.Img className="h-50" src={product.imageUrl} />
+          </Link>
+          <Card.Text className="text-center">Price: $ {product.price}</Card.Text>
+          <Button className="w-100" variant="info" onClick={() => addItemToCart(product)}>
             Add to Cart
-          </button>
-        </div>
-      </div>
+          </Button>
+        </Card.Body>
+      </Card>
     </div>
   );
 };

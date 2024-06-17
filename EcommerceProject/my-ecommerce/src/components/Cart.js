@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { CartContext } from '../utils/CartContext';
+import CartContext from '../utils/CartContext';
 import CartItems from './CartItems';
 
 const Cart = () => {
@@ -13,11 +13,9 @@ const Cart = () => {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">Cart</h5>
-            <div style={{ marginLeft: '660px'}}>
-            <button type="button" className="close"  onClick={toggleCartVisibility}>
-            <span>&times;</span>
+            <button type="button" className="close" onClick={toggleCartVisibility}>
+              <span>&times;</span>
             </button>
-            </div>
           </div>
           <div className="modal-body">
             <div className="list-group">
