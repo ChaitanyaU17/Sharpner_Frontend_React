@@ -1,47 +1,52 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
-import { Card, Button, Spinner } from 'react-bootstrap';
-import { CartContext } from '../utils/CartContext';
-
+import { useParams } from "react-router-dom";
+import Carousel from "react-bootstrap/Carousel";
+import { Col, Image, Card, Row } from "react-bootstrap";
+import { useEffect, useState } from "react";
 const ProductDetailPage = () => {
   const params = useParams();
-  const [product, setProduct] = useState(null);
-  const { addItemToCart } = useContext(CartContext);
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      const response = await fetch(`https://dummyjson.com/products/${params.id}`);
-      const data = await response.json();
-      setProduct(data);
-    };
-
-    fetchProduct();
-  }, [params.id]);
-
-  if (!product) {
-    return <Spinner animation="border" />;
-  }
-
+  const [productDetail, setProductDetail] = useState(null);
+  useEffect(
+    () => {
+      fetch(`https://dummyjson.com/products/${params.id}`)
+        .then(res => res.json())
+        .then(data => setProductDetail(data));
+    },
+    [params.id]
+  );
   return (
-    <div className="container mt-4 d-flex">
-      <Card style={{ width: '18rem' }}>
-        <Card.Img variant="top" src={product.images[0]} />
-        <Card.Body>
-          <Card.Title>{product.title}</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">{product.brand}</Card.Subtitle>
-          <Card.Text>
-            <strong>${product.price}</strong>
-          </Card.Text>
-          <Button variant="info" onClick={() => addItemToCart(product)}>
-            Add to Cart
-          </Button>
-        </Card.Body>
-      </Card>
-      <div className="ms-4 w-25">
-        <p>{product.description}</p>
-      </div>
+    <div>
+      {productDetail !== null &&
+        <Row>
+          <Col xs={6} className="bg-dark">
+            <Carousel>
+              {productDetail.images.map(image =>
+                <Carousel.Item>
+                  <Image src={image} className="w-100" />
+                </Carousel.Item>
+              )}
+            </Carousel>
+          </Col>
+          <Col xs={6}>
+            <Card>
+              <Card.Body>
+                <Card.Title>
+                  {productDetail.title}
+                </Card.Title>
+                <Card.Subtitle className="mb-2 text-muted">
+                  {productDetail.category} Price: ${productDetail.price}
+                </Card.Subtitle>
+                <Card.Subtitle className="mb-2 text-muted">
+                  Brand: {productDetail.brand}
+                </Card.Subtitle>
+                <Card.Text>
+                  Summary: {productDetail.description}
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>}
+      {productDetail == null && <p>Loading...</p>}
     </div>
   );
 };
-
 export default ProductDetailPage;

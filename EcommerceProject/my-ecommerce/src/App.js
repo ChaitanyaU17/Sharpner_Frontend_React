@@ -1,32 +1,64 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import './App.css';
-import Cart from './components/Cart';
-import Header from './components/Header';
-import Store from './components/Store';
-import About from './components/About';
-import { CartProvider } from './utils/CartContext';
-import Home from './components/Home';
-import ContactUs from './components/ContactUs';
-import ProductDetailPage from './components/ProductDetailPage';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
+import "./App.css";
+import { Suspense, lazy } from "react";
+import { CartContextProvider } from "./context_store/Cart_Context";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider
+} from "react-router-dom";
+import About from "./components/About";
+import Root from "./components/Root";
+import Home from "./components/Home";
+import ErrorPage from "./components/ErrorPage";
+import "./App.css";
+import ContactUS from "./components/ContactUs"
+import AuthForm from "./Auth/AuthForm"
+import AuthContext from "./context_store/AuthContext";
+import { useContext } from "react";
 function App() {
+  const Store = lazy(()=>import('./components/Store'));
+  const ProductDetailPage = lazy(()=>import('./components/ProductDetailPage'));
+  const authCtx = useContext(AuthContext);
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Root />,
+      errorElement: <ErrorPage />,
+      children: [
+        { path: "/about", element: <About /> },
+        {
+          path: "/",
+          element: authCtx.userLoggedIn ? <Navigate to="/store" replace />:<Navigate to="/user-auth"  />
+        },
+        {
+          path: "/store",
+          element:authCtx.userLoggedIn ?  <Suspense fallback={<p>Loading....</p>}><Store /></Suspense> :<Navigate to="/user-auth"  />
+        },
+        {
+          path: "/home",
+          element: <Home />
+        },
+        {
+          path: "/contact",
+          element: <ContactUS />
+        },
+        {
+          path: "/product-detail/:id",
+          element:<Suspense fallback={<p>Loading...</p>}> <ProductDetailPage /></Suspense>
+        },
+        {
+          path: "/user-auth",
+          element: <AuthForm />
+        },
+  
+      ]
+    }
+  ]);
   return (
-    <CartProvider>
-      <Router>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/store" element={<Store />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<ContactUs />} />
-          <Route path="/products/:id" element={<ProductDetailPage />} />
-        </Routes>
-        <Cart />
-      </Router>
-    </CartProvider>
+      <CartContextProvider>
+        <RouterProvider router={router} />
+      </CartContextProvider>
   );
 }
 

@@ -1,35 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { DropdownButton, Dropdown, Button } from 'react-bootstrap';
-import GenricsCard from './Card'; 
+import {   useEffect, useState } from "react";
+import GenricsCard from '../Layout/Card'
+import { Button, Dropdown, DropdownButton } from "react-bootstrap";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Store = () => {
-  const [products, setProducts] = useState([]);
+  const [product, setProduct] = useState([]);
   const [pageCount, setPageCount] = useState(1);
   const [categories, setCategories] = useState([]);
-
-  console.log(categories);
-  
   useEffect(() => {
     fetch("https://dummyjson.com/products")
       .then(data => data.json())
       .then(data => {
-        setProducts(data.products);
+        setProduct(data.products);
       });
-
     fetch("https://dummyjson.com/products/categories")
       .then(res => res.json())
       .then(data => setCategories(data));
   }, []);
-
-  const navigate = useNavigate();
+  const history = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  
-  const handleCategoryChange = category => {
-    navigate(`/store?name=${category.slug}`);
+  const QueryHandler = cate => {
+    history("/store?name=" + cate);
   };
-
   return (
     <div>
       <h1 className="text-center">PRODUCTS</h1>
@@ -39,51 +32,57 @@ const Store = () => {
         className="m-2"
         variant="info"
       >
-        {categories.map((category, index) => (
-          <Dropdown.Item key={index} onClick={() => handleCategoryChange(category)}>
-            {category.name}
+        {categories.map((item,index) =>
+          <Dropdown.Item key={index} onClick={() => QueryHandler(item)}>
+            {item}
           </Dropdown.Item>
-        ))}
+        )}
       </DropdownButton>
-      <div className="row" style={{marginLeft: '200px'}}>
+      <div className="row">
         {queryParams.get("name") === null &&
-          products.slice(0, pageCount * 10).map((product) => (
-            <div className="col-6" key={product.id}>
-              <GenricsCard
-                title={product.title}
-                id={product.id}
-                price={product.price}
-                imageUrl={product.thumbnail}
-              />
-            </div>
-          ))}
-        {queryParams.get("name") !== null &&
-          products
-            .filter(product => product.category === queryParams.get("name"))
-            .map((product) => (
-              <div className="col-6" key={product.id}>
+          product.map((item, index) => {
+            return (
+              index < pageCount * 10 &&
+              <div className="col-6" key={item.id}>
                 <GenricsCard
-                  title={product.title}
-                  id={product.id}
-                  price={product.price}
-                  imageUrl={product.thumbnail}
+                  
+                  title={item.title}
+                  id={item.id}
+                  price={item.price}
+                  imageUrl={item.thumbnail}
                 />
               </div>
-            ))}
+            );
+          })}
+        {queryParams.get("name") !== null &&
+          product.map((item, index) => {
+            return (
+              queryParams.get("name") === item.category &&
+              <div className="col-lg-6" key={item.id}>
+                <GenricsCard
+                  title={item.title}
+                  id={item.id}
+                  price={item.price}
+                  imageUrl={item.thumbnail}
+                />
+              </div>
+            );
+          })}
       </div>
       <div className="d-flex justify-content-center">
-        {(pageCount + 1) * 10 <= products.length &&
-          queryParams.get("name") === null && (
-            <Button
-              variant="secondary"
-              onClick={() => setPageCount(pageCount + 1)}
-            >
-              View More
-            </Button>
-          )}
+        {(pageCount + 1) * 10 <= product.length &&
+          pageCount * 10 < product.length &&
+          queryParams.get("name") === null &&
+          <Button
+            variant="secondary"
+            onClick={() => {
+              setPageCount(pageCount + 1);
+            }}
+          >
+            View More
+          </Button>}
       </div>
     </div>
   );
 };
-
 export default Store;
