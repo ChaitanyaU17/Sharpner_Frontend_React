@@ -10,6 +10,9 @@ const AuthForm = () => {
   const [isloading, setIsLoading] = useState(false);
   const [showMsg, setShowMsg] = useState({ active: false, message: "" });
   const email = useRef();
+
+ //	Updating the Old Password
+
   const password = useRef();
   // const username = useRef();
   const switchAuthModeHandler = () => {
