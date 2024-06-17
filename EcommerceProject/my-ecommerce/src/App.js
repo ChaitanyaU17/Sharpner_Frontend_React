@@ -2,6 +2,7 @@
 import "./App.css";
 import { Suspense, lazy } from "react";
 import { CartContextProvider } from "./context_store/Cart_Context";
+import Profile from "./components/UpdateProfile";
 import {
   createBrowserRouter,
   Navigate,
@@ -53,7 +54,12 @@ function App() {
           path: "/user-auth",
           element: <AuthForm />
         },
-  
+        {
+          path: "/change-password",
+          element: authCtx.userLoggedIn
+            ? <Profile />
+            : <Navigate to="/user-auth" />
+        }
       ]
     }
   ]);
