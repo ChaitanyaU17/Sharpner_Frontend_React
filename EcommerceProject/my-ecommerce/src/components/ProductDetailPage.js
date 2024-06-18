@@ -2,36 +2,57 @@ import { useParams } from "react-router-dom";
 import Carousel from "react-bootstrap/Carousel";
 import { Col, Image, Card, Row } from "react-bootstrap";
 import { useEffect, useState } from "react";
+
 const ProductDetailPage = () => {
-  const params = useParams();
+  const { id } = useParams();
   const [productDetail, setProductDetail] = useState(null);
-  useEffect(
-    () => {
-      fetch(`https://dummyjson.com/products/${params.id}`)
-        .then(res => res.json())
-        .then(data => setProductDetail(data));
-    },
-    [params.id]
-  );
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProductDetail = async () => {
+      try {
+        const response = await fetch(`https://dummyjson.com/products/${id}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch product details.");
+        }
+        const data = await response.json();
+        setProductDetail(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProductDetail();
+  }, [id]);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
   return (
     <div>
-      {productDetail !== null &&
+      {productDetail && (
         <Row>
           <Col xs={6} className="bg-dark">
             <Carousel>
-              {productDetail.images.map(image =>
-                <Carousel.Item>
+              {productDetail.images.map((image, index) => (
+                <Carousel.Item key={index}>
                   <Image src={image} className="w-100" />
                 </Carousel.Item>
-              )}
+              ))}
             </Carousel>
           </Col>
           <Col xs={6}>
             <Card>
               <Card.Body>
-                <Card.Title>
-                  {productDetail.title}
-                </Card.Title>
+                <Card.Title>{productDetail.title}</Card.Title>
                 <Card.Subtitle className="mb-2 text-muted">
                   {productDetail.category} Price: ${productDetail.price}
                 </Card.Subtitle>
@@ -44,9 +65,10 @@ const ProductDetailPage = () => {
               </Card.Body>
             </Card>
           </Col>
-        </Row>}
-      {productDetail == null && <p>Loading...</p>}
+        </Row>
+      )}
     </div>
   );
 };
+
 export default ProductDetailPage;
