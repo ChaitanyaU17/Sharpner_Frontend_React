@@ -5,7 +5,10 @@ const CartContext = React.createContext({
   totalAmount: 0,
   addItem: item => {},
   removeItem: id => {}
-});
+});  
+
+//use crudcrud store cart details
+
 export const CartContextProvider = props => {
   const authCtx = useContext(AuthContext);
   const [itemState, setItemState] = useState([]);
