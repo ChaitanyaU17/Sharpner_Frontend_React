@@ -11,9 +11,6 @@ const AuthForm = () => {
   const [isloading, setIsLoading] = useState(false);
   const [showMsg, setShowMsg] = useState({ active: false, message: "" });
   const email = useRef();
-
- //	Updating the Old Password
-
   const password = useRef();
   // const username = useRef();
   const switchAuthModeHandler = () => {
@@ -25,7 +22,7 @@ const AuthForm = () => {
     setIsLoading(true);
     if (!isLogin) {
       const response = await fetch(
-        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}
+        `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}
         `,
         {
           method: "POST",
