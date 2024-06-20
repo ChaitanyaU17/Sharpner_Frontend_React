@@ -3,7 +3,7 @@ import { Toast, ToastContainer } from "react-bootstrap";
 import classes from "./AuthForm.module.css";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../context_store/AuthContext";
-import { API_KEY } from "../utils/constants";
+// import { API_KEY } from "../utils/constants";
 
 const AuthForm = () => {
   const ctx = useContext(AuthContext);
@@ -22,7 +22,7 @@ const AuthForm = () => {
     setIsLoading(true);
     if (!isLogin) {
       const response = await fetch(
-        `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}
+        `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAIf8CbVR79wRRf2XfpvF0xU6zQ__SJDAM
         `,
         {
           method: "POST",
@@ -53,7 +53,7 @@ const AuthForm = () => {
       }
     } else {
       const response = await fetch(
-        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY} 
+        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAIf8CbVR79wRRf2XfpvF0xU6zQ__SJDAM 
         `,
         {
           method: "POST",
@@ -69,6 +69,7 @@ const AuthForm = () => {
       );
 
       const data = await response.json();
+      console.log(data);
       if (data.error) {
         setIsLoading(false);
         setShowMsg({ active: true, message: data.error.message });

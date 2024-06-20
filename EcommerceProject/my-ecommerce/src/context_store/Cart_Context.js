@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useCallback } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "./AuthContext";
 
 const CartContext = React.createContext({
@@ -7,17 +7,17 @@ const CartContext = React.createContext({
   addItem: item => {},
   removeItem: id => {}
 });
-
 export const CartContextProvider = props => {
   const authCtx = useContext(AuthContext);
   const [itemState, setItemState] = useState([]);
 
-  const getData = useCallback(() => {
-    fetch(`https://crudcrud.com/api/da08b0e4e8c5474fa9638c1691155fa2/Cart`)
+  const getData = () => {
+    fetch(`https://crudcrud.com/api/9f5c20e5c15c4e408d0762206854e587/cart`)
       .then(res => {
         if (!res.ok) {
-          throw new Error("something went wrong");
+          throw new Error("somethingwrong");
         }
+
         return res.json();
       })
       .then(data => {
@@ -27,17 +27,19 @@ export const CartContextProvider = props => {
         setItemState(filterdetail);
       })
       .catch(err => setItemState([]));
-  }, [authCtx.useremail]);
-
-  useEffect(() => {
-    getData();
-  }, [getData]);
+  };
+  useEffect(
+    () => {
+      getData();
+    },
+    [authCtx.useremail]
+  );
 
   const addItemHandler = async newItem => {
     const found = itemState.find(element => element.id === newItem.id);
     if (found) {
       const response = await fetch(
-        `https://crudcrud.com/api/da08b0e4e8c5474fa9638c1691155fa2/Cart/${found._id}`,
+        `https://crudcrud.com/api/9f5c20e5c15c4e408d0762206854e587/cart/${found._id}`,
         {
           method: "PUT",
           headers: {
@@ -58,7 +60,7 @@ export const CartContextProvider = props => {
       }
     } else {
       const response = await fetch(
-        "https://crudcrud.com/api/da08b0e4e8c5474fa9638c1691155fa2/Cart",
+        "https://crudcrud.com/api/9f5c20e5c15c4e408d0762206854e587/cart",
         {
           method: "POST",
           headers: {
@@ -78,11 +80,10 @@ export const CartContextProvider = props => {
       }
     }
   };
-
   const removeItemHandler = async ele => {
     if (ele.quantity - 1 === 0) {
       await fetch(
-        `https://crudcrud.com/api/da08b0e4e8c5474fa9638c1691155fa2/Cart/${ele._id}`,
+        `https://crudcrud.com/api/9f5c20e5c15c4e408d0762206854e587/cart/${ele._id}`,
         {
           method: "DELETE",
           headers: {
@@ -92,7 +93,7 @@ export const CartContextProvider = props => {
       );
     } else {
       await fetch(
-        `https://crudcrud.com/api/da08b0e4e8c5474fa9638c1691155fa2/Cart/${ele._id}`,
+        `https://crudcrud.com/api/9f5c20e5c15c4e408d0762206854e587/cart/${ele._id}`,
         {
           method: "PUT",
           headers: {
@@ -109,25 +110,23 @@ export const CartContextProvider = props => {
         }
       );
     }
+
     getData();
   };
-
   const totalAmount = itemState.reduce((curr, item) => {
-    return curr + item.price * item.quantity;
+    return (curr = curr + item.price * item.quantity);
   }, 0);
-
   const contextValue = {
     items: itemState,
     totalAmount: totalAmount,
     addItem: addItemHandler,
     removeItem: removeItemHandler
   };
-
   return (
     <CartContext.Provider value={contextValue}>
       {props.children}
     </CartContext.Provider>
   );
 };
-
 export default CartContext;
+

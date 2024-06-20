@@ -4,95 +4,85 @@ import { Button, Dropdown, DropdownButton } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const Store = () => {
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [product, setProduct] = useState([]);
   const [pageCount, setPageCount] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  
-  const navigate = useNavigate();
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    fetch("https://dummyjson.com/products")
+      .then(data => data.json())
+      .then(data => {
+        setProduct(data.products);
+      });
+    fetch("https://dummyjson.com/products/categories")
+      .then(res => res.json())
+      .then(data => setCategories(data));
+  }, []);
+  const history = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch("https://dummyjson.com/products");
-        const data = await res.json();
-        setProducts(data.products);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    const fetchCategories = async () => {
-      try {
-        const res = await fetch("https://dummyjson.com/products/categories");
-        const data = await res.json();
-        setCategories(data);
-      } catch (err) {
-        setError(err.message);
-      }
-    };
-
-    fetchProducts();
-    fetchCategories();
-  }, []);
-
-  const queryHandler = (category) => {
-    navigate(`/store?name=${category}`);
+  const QueryHandler = cate => {
+    history("/store?name=" + cate.slug);
+   
   };
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
-
-  const filteredProducts = queryParams.get("name")
-    ? products.filter(product => product.category === queryParams.get("name"))
-    : products.slice(0, pageCount * 10);
-
   return (
     <div>
       <h1 className="text-center">PRODUCTS</h1>
-      <DropdownButton
+
+       <DropdownButton
         id="dropdown-basic-button"
         title="Categories"
         className="m-2"
         variant="info"
       >
-        {categories.map((item, index) => (
-          <Dropdown.Item key={index} onClick={() => queryHandler(item)}>
-            {item}
+        {categories.map((item,index) =>
+          <Dropdown.Item key={index} onClick={() => QueryHandler(item)}>
+            {item.name}
           </Dropdown.Item>
-        ))}
+        )}
       </DropdownButton>
       <div className="row">
-        {filteredProducts.map((item) => (
-          <div className="col-6" key={item.id}>
-            <GenricsCard
-              title={item.title}
-              id={item.id}
-              price={item.price}
-              imageUrl={item.thumbnail}
-            />
-          </div>
-        ))}
+        {queryParams.get("name") === null &&
+          product.map((item, index) => {
+            return (
+              index < pageCount * 10 &&
+              <div className="col-6" key={item.id}>
+                <GenricsCard
+                  
+                  title={item.title}
+                  id={item.id}
+                  price={item.price}
+                  imageUrl={item.thumbnail}
+                />
+              </div>
+            );
+          })}
+        {queryParams.get("name") !== null &&
+          product.map((item, index) => {
+            return (
+              queryParams.get("name") === item.category &&
+              <div className="col-lg-6" key={item.id}>
+                <GenricsCard
+                  title={item.title}
+                  id={item.id}
+                  price={item.price}
+                  imageUrl={item.thumbnail}
+                />
+              </div>
+            );
+          })}
       </div>
       <div className="d-flex justify-content-center">
-        {pageCount * 10 < products.length && !queryParams.get("name") && (
+        {(pageCount + 1) * 10 <= product.length &&
+          pageCount * 10 < product.length &&
+          queryParams.get("name") === null &&
           <Button
             variant="secondary"
-            onClick={() => setPageCount(pageCount + 1)}
+            onClick={() => {
+              setPageCount(pageCount + 1);
+            }}
           >
             View More
-          </Button>
-        )}
+          </Button>}
       </div>
     </div>
   );

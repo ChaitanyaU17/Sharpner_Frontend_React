@@ -12,12 +12,10 @@ import About from "./components/About";
 import Root from "./components/Root";
 import Home from "./components/Home";
 import ErrorPage from "./components/ErrorPage";
-import "./App.css";
 import ContactUS from "./components/ContactUs"
 import AuthForm from "./Auth/AuthForm"
 import AuthContext from "./context_store/AuthContext";
 import { useContext } from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const Store = lazy(()=>import('./components/Store'));

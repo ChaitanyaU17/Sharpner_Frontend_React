@@ -73,7 +73,7 @@ const ContactUs = () => {
                 setContactDetail(prev => ({ ...prev, pno: e.target.value }))}
             />
           </Form.Group>
-          <Button variant="primary" type="submit" className="my-2">
+          <Button variant="info" type="submit" className="my-2">
             Submit
           </Button>
         </Form>

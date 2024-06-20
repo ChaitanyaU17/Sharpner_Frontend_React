@@ -7,7 +7,7 @@ const GenricsCard = props => {
   return (
     <div className="d-flex justify-content-around">
       <Card border="light">
-        <Card.Header className="text-center">
+        <Card.Header className="text-center text-black" style={{fontWeight: '600'}}>
           {props.title}
         </Card.Header>
         <Card.Body>
@@ -19,7 +19,7 @@ const GenricsCard = props => {
           </Card.Text>
 
           <Button
-            className="w-100"
+            className="w-100 opacity-75"
             variant="info"
             onClick={() => ctx.addItem(props)}
           >

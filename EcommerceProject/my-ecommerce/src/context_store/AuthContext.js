@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+
 const AuthContext = React.createContext({
   tokenId: "",
   userLoggedIn: false,
@@ -14,7 +15,7 @@ export const AuthContextProvider = props => {
   const [tokenId, setTokenId] = useState(idTokenLocal);
   const [email, setemailId] = useState(userEmailLocal);
   
-//auto logout
+
   const loginHandler = (id,email) => {
     localStorage.setItem("idToken", JSON.stringify(id));
     localStorage.setItem('email',email)
@@ -22,9 +23,6 @@ export const AuthContextProvider = props => {
     setTokenId(id);
     setemailId(email);
   };
-
-  //Implementing Logout functionality 
-
   const logoutHandler = id => {
     localStorage.clear("idToken");
     localStorage.clear('email')
