@@ -69,7 +69,7 @@ const AuthForm = () => {
       );
 
       const data = await response.json();
-      console.log(data);
+      //console.log(data);
       if (data.error) {
         setIsLoading(false);
         setShowMsg({ active: true, message: data.error.message });

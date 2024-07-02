@@ -12,7 +12,7 @@ export const CartContextProvider = props => {
   const [itemState, setItemState] = useState([]);
 
   const getData = () => {
-    fetch(`https://crudcrud.com/api/9f5c20e5c15c4e408d0762206854e587/cart`)
+    fetch(`https://crudcrud.com/api/9eaf250d6c1f4b64af0ff6ec74560236/cart`)
       .then(res => {
         if (!res.ok) {
           throw new Error("somethingwrong");
@@ -39,7 +39,7 @@ export const CartContextProvider = props => {
     const found = itemState.find(element => element.id === newItem.id);
     if (found) {
       const response = await fetch(
-        `https://crudcrud.com/api/9f5c20e5c15c4e408d0762206854e587/cart/${found._id}`,
+        `https://crudcrud.com/api/9eaf250d6c1f4b64af0ff6ec74560236/cart/${found._id}`,
         {
           method: "PUT",
           headers: {
@@ -60,7 +60,7 @@ export const CartContextProvider = props => {
       }
     } else {
       const response = await fetch(
-        "https://crudcrud.com/api/9f5c20e5c15c4e408d0762206854e587/cart",
+        "https://crudcrud.com/api/9eaf250d6c1f4b64af0ff6ec74560236/cart",
         {
           method: "POST",
           headers: {
@@ -83,7 +83,7 @@ export const CartContextProvider = props => {
   const removeItemHandler = async ele => {
     if (ele.quantity - 1 === 0) {
       await fetch(
-        `https://crudcrud.com/api/9f5c20e5c15c4e408d0762206854e587/cart/${ele._id}`,
+        `https://crudcrud.com/api/9eaf250d6c1f4b64af0ff6ec74560236/cart/${ele._id}`,
         {
           method: "DELETE",
           headers: {
@@ -93,7 +93,7 @@ export const CartContextProvider = props => {
       );
     } else {
       await fetch(
-        `https://crudcrud.com/api/9f5c20e5c15c4e408d0762206854e587/cart/${ele._id}`,
+        `https://crudcrud.com/api/9eaf250d6c1f4b64af0ff6ec74560236/cart/${ele._id}`,
         {
           method: "PUT",
           headers: {
