@@ -7,6 +7,7 @@ const UpdateProfile = () => {
   const [photoUrl, setPhotoUrl] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -74,19 +75,23 @@ const UpdateProfile = () => {
 
   return (
     <Container fluid>
-      <Row className="mb-4">
-        <Col sm={6}>Welcome to Expense Tracker!!</Col>
-        <Col sm={3} className="bg-info">
-          Your Profile is incomplete. <Link to="/update-profile">Complete now</Link>
+      <Row className="mb-4 p-2 border border-black">
+        <Col sm={6}>
+        { showProfile ? <i>Winners never quit, Quitters never win</i> : <i> Welcome to Expense Tracker!! </i>}
+        </Col>
+        <Col sm={3} className="bg-danger bg-opacity-25 p-1 rounded"><i>
+          Your Profile is incomplete. <Link onClick={() => setShowProfile(true)} to="/update-profile">Complete now</Link>
+          </i>
         </Col>
       </Row>
+      {showProfile && (
       <Container>
         <h2>Contact Details</h2>
         <Form onSubmit={handleUpdateProfile}>
           {error && <Alert variant="danger">{error}</Alert>}
           {success && <Alert variant="success">Profile updated successfully</Alert>}
-          <Row className="justify-content-md-center">
-            <Col>
+          <Row className="justify-content-md-evenly">
+            <Col >
               <Form.Label>Full Name</Form.Label>
               <Form.Control
                 size="sm"
@@ -94,14 +99,16 @@ const UpdateProfile = () => {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 required
+                className='mb-3 w-50'
               />
-              <Form.Label>Photo URL</Form.Label>
+              <Form.Label>Profile Photo URL</Form.Label>
               <Form.Control
                 size="sm"
                 type="text"
                 value={photoUrl}
                 onChange={(e) => setPhotoUrl(e.target.value)}
                 required
+                className='w-50'
               />
             </Col>
           </Row>
@@ -110,6 +117,7 @@ const UpdateProfile = () => {
           </Button>
         </Form>
       </Container>
+        )}
     </Container>
   );
 };
