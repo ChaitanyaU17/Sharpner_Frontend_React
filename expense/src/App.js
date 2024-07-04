@@ -1,30 +1,23 @@
-// App.js
 import React from 'react';
-//import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Signup from './components/Signup';
 import UpdateProfile from './components/UpdateProfile';
 import { AuthProvider } from './Auth/AuthContext';
-import {createBrowserRouter,RouterProvider} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Signup />
-  },
-  {
-    path: "/update-profile",
-    element: <UpdateProfile />
-  }
-]);
 
 const App = () => {
   return (
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <Router>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<Navigate to="/signup" />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Signup />} />
+          <Route path="/update-profile" element={<UpdateProfile />} />
+        </Routes>
+      </AuthProvider>
+    </Router>
   );
 };
 
 export default App;
-
