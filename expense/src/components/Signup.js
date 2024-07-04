@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Form, Button, Alert } from 'react-bootstrap';
 import { useAuth } from '../Auth/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import UpdateProfile from './UpdateProfile';
 
 const Signup = () => {
@@ -93,7 +93,7 @@ const Signup = () => {
       console.log('Logged in successfully', data);
       setSuccess(true);
       login(data);
-      navigate('/update-profile'); // Redirect to update profile after login
+      navigate('/update-profile');
     } catch (error) {
       setError(error.message);
     }
@@ -167,7 +167,7 @@ const Signup = () => {
                 Create an account? Signup
               </p>
               <p className="text-primary" style={{ cursor: 'pointer' }}>
-                Forget Your Password? Click Here
+                <Link to="/forget-password">Forget Your Password? Click Here</Link>
               </p>
             </>
           ) : (
