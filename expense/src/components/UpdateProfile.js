@@ -120,6 +120,8 @@ const UpdateProfile = () => {
         <Col sm={2} className="d-flex justify-content-end">
         <Button className='bg-success bg-opacity-75 mt-3' onClick={handleEmailVerification}>Verify Email</Button>
         </Col>
+        
+        {/* logout */}
         <Col sm={2} className="d-flex justify-content-end">
           <Button className="mt-3 bg-danger bg-opacity-50" onClick={logout}>Logout</Button>
         </Col>
