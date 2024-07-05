@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert, Spinner } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const ForgetPassword = () => {
   const [email, setEmail] = useState('');
@@ -61,6 +62,9 @@ const ForgetPassword = () => {
         <Button variant="primary" className="mb-3 w-100 rounded-5" type="submit" disabled={loading}>
           {loading ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : 'Next'}
         </Button>
+        <div className="border border-primary p-1 rounded text-center mt-3">
+          <Link to="/signup" style={{textDecoration: 'none'}} >Back to Signup</Link>
+        </div>
       </Form>
     </div>
   );

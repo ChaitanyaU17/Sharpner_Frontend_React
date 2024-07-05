@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, Form, Button, Alert } from 'react-bootstrap';
 import { useAuth } from '../Auth/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-import UpdateProfile from './UpdateProfile';
+import ExpenseForm from './ExpenseForm';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -57,7 +57,6 @@ const Signup = () => {
       setPassword('');
       setConfirmPassword('');
       login(data);
-      navigate('/update-profile'); // Redirect to update profile after signup
     } catch (error) {
       setError(error.message);
     }
@@ -93,19 +92,19 @@ const Signup = () => {
       console.log('Logged in successfully', data);
       setSuccess(true);
       login(data);
-      navigate('/update-profile');
+      navigate('/');
     } catch (error) {
       setError(error.message);
     }
   };
 
   if (isLoggedIn) {
-    return <UpdateProfile />;
+    return <ExpenseForm />;
   }
 
   return (
     <div>
-      <Card style={{ width: '20rem', marginTop: '10%' }} className="mx-auto">
+      <Card style={{ width: '20rem', marginTop: '7%' }} className="mx-auto">
         <h2 className="text-center mt-3 mb-3 w-100">
           {showLoginPage ? 'Login' : 'Signup'}
         </h2>
@@ -160,23 +159,21 @@ const Signup = () => {
           {showLoginPage ? (
             <>
               <p
-                className="text-primary"
                 onClick={() => setShowLoginPage(false)}
                 style={{ cursor: 'pointer' }}
               >
-                Create an account? Signup
+                Create an account? <span className='text-primary'>Signup</span>
               </p>
-              <p className="text-primary" style={{ cursor: 'pointer' }}>
-                <Link to="/forget-password">Forget Your Password? Click Here</Link>
+              <p style={{ cursor: 'pointer' }}>
+                Forget Your Password? <Link style={{textDecoration: 'none'}} to="/forget-password">Click Here</Link>
               </p>
             </>
           ) : (
             <p
-              className="text-primary"
               onClick={() => setShowLoginPage(true)}
               style={{ cursor: 'pointer' }}
             >
-              Have an Account? Login
+              Have an Account? <span className='text-primary'>Login</span>
             </p>
           )}
         </div>

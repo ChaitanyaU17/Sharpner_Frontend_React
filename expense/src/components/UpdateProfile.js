@@ -1,20 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import Header from './Header';
 import { useAuth } from '../Auth/AuthContext';
 
 const UpdateProfile = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const [fullName, setFullName] = useState('');
   const [photoUrl, setPhotoUrl] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
+        if (!user) {
+          setLoading(false);
+          return;
+        }
+
         const response = await fetch(
           'https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyANERKoLhs3lYRdOUUuhTC2iH9FUv-oLT0',
           {
@@ -38,12 +44,12 @@ const UpdateProfile = () => {
         setPhotoUrl(userProfile.photoUrl || '');
       } catch (error) {
         setError(error.message);
+      } finally {
+        setLoading(false);
       }
     };
 
-    if (user) {
-      fetchProfileData();
-    }
+    fetchProfileData();
   }, [user]);
 
   const handleUpdateProfile = async (e) => {
@@ -106,28 +112,15 @@ const UpdateProfile = () => {
     }
   };
 
+  if (loading) {
+    return <div>Loading...</div>; // Add a loading indicator
+  }
+
   return (
     <Container fluid>
-      <Row className=" p-2 border border-black">
-        <Col sm={4}>
-          {showProfile ? <i>Winners never quit, Quitters never win</i> : <i> Welcome to Expense Tracker!! </i>}
-        </Col>
-        <Col className="bg-danger bg-opacity-25 p-1 rounded">
-          <i>
-            Your Profile is incomplete. <Link onClick={() => setShowProfile(true)} to="/update-profile">Complete now</Link>
-          </i>
-        </Col>
-        <Col sm={2} className="d-flex justify-content-end">
-        <Button className='bg-success bg-opacity-75 mt-3' onClick={handleEmailVerification}>Verify Email</Button>
-        </Col>
-        
-        {/* logout */}
-        <Col sm={2} className="d-flex justify-content-end">
-          <Button className="mt-3 bg-danger bg-opacity-50" onClick={logout}>Logout</Button>
-        </Col>
-      </Row>
+      <Header handleEmailVerification={handleEmailVerification} setShowProfile={() => setShowProfile} />
       <Container className="mt-4">
-        {emailSent && <Alert variant="success">Verification email sent successfully. Check your email to verify.</Alert>} 
+        {emailSent && <Alert variant="success">Verification email sent successfully. Check your email to verify.</Alert>}
       </Container>
       {showProfile && (
         <Container>
@@ -160,11 +153,12 @@ const UpdateProfile = () => {
                 </Form.Group>
               </Col>
             </Row>
-            <Button className="mt-3 bg-danger bg-opacity-75" type="submit">Update Profile</Button>
+            <Button className="mt-3 bg-danger bg-opacity-75" type="submit">
+              Update Profile
+            </Button>
           </Form>
         </Container>
       )}
-     
     </Container>
   );
 };

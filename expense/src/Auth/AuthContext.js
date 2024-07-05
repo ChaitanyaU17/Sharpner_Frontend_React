@@ -51,12 +51,11 @@ export const AuthProvider = ({ children }) => {
     setIsLoggedIn(true);
     localStorage.setItem('idToken', userData.idToken);
   };
-  
-  //logout clear idToken in localstorage
+
   const logout = () => {
     setUser(null);
     setIsLoggedIn(false);
-    localStorage.removeItem('idToken');
+    localStorage.removeItem('idToken'); // Corrected to pass 'idToken'
   };
 
   const value = {
@@ -68,3 +67,5 @@ export const AuthProvider = ({ children }) => {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
+
+export default AuthProvider;
