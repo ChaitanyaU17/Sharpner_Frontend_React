@@ -4,8 +4,8 @@ import Signup from './components/Signup';
 import Header from './components/Header';
 import UpdateProfile from './components/UpdateProfile';
 import ForgetPassword from './components/ForgetPassword';
-import { AuthProvider, useAuth } from './Auth/AuthContext';
 import ExpenseForm from './components/ExpenseForm';
+import { AuthProvider, useAuth } from './Auth/AuthContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const RouterComponent = () => {
@@ -13,11 +13,10 @@ const RouterComponent = () => {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: isLoggedIn
-        ? <Header /> : <Navigate to="/signup" replace />,
+      element: isLoggedIn ? <Header /> : <Navigate to="/signup" replace />,
       children: [
         {
-          path: "/update-profile",
+          path: "update-profile",
           element: <UpdateProfile />
         },
         {
@@ -28,18 +27,11 @@ const RouterComponent = () => {
     },
     {
       path: "/signup",
-      children: [
-        {
-          path: "/signup",
-          element: isLoggedIn
-            ? <Navigate to="/" replace />
-            : <Signup />
-        },
-        {
-          path: "/signup/forget-pass",
-          element: <ForgetPassword />
-        }
-      ]
+      element: isLoggedIn ? <Navigate to="/" replace /> : <Signup />,
+    },
+    {
+      path: "/forget-password",
+      element: <ForgetPassword />
     }
   ]);
 

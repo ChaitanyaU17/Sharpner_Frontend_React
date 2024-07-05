@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, Button } from 'react-bootstrap';
 
-const ExpenseList = ({ expenses, editHandler }) => {
+const ExpenseList = ({ expenses, editHandler, deleteHandler }) => {
   return (
     <div className="w-80">
       <h1>Expense List</h1>
@@ -32,7 +32,7 @@ const ExpenseList = ({ expenses, editHandler }) => {
                   </Button>
                   <Button
                     variant="danger"
-                    onClick={() => console.log('Delete functionality not implemented')}
+                    onClick={() => deleteHandler(index)}
                   >
                     Delete
                   </Button>

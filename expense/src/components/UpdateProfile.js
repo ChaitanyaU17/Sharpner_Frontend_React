@@ -10,8 +10,8 @@ const UpdateProfile = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showUpdateProfile, setShowUpdateProfile] = useState(false);
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -116,18 +116,29 @@ const UpdateProfile = () => {
     return <div>Loading...</div>; // Add a loading indicator
   }
 
+  const showProfile = (e) => {
+    e.preventDefault();
+    setShowUpdateProfile(true);
+  }
+
   return (
     <Container fluid>
-      <Header handleEmailVerification={handleEmailVerification} setShowProfile={() => setShowProfile} />
+      <Header handleEmailVerification={handleEmailVerification} updateProfile={showProfile} />
       <Container className="mt-4">
-        {emailSent && <Alert variant="success">Verification email sent successfully. Check your email to verify.</Alert>}
+        {emailSent && (
+          <Alert variant="success">
+            Verification email sent successfully. Check your email to verify.
+          </Alert>
+        )}
       </Container>
-      {showProfile && (
+      {showUpdateProfile && (
         <Container>
           <h2>Contact Details</h2>
           <Form onSubmit={handleUpdateProfile}>
             {error && <Alert variant="danger">{error}</Alert>}
-            {success && <Alert variant="success">Profile updated successfully</Alert>}
+            {success && (
+              <Alert variant="success">Profile updated successfully</Alert>
+            )}
             <Row className="justify-content-md-evenly">
               <Col>
                 <Form.Group>

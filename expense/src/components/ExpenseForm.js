@@ -1,10 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { useAuth } from '../Auth/AuthContext'; 
-import ExpenseList from './ExpenseList'; 
+import { useAuth } from '../Auth/AuthContext';
+import ExpenseList from './ExpenseList';
 
 const ExpenseForm = () => {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, user } = useAuth();
   const [expenses, setExpenses] = useState([]);
   const [showAlert, setShowAlert] = useState({ active: false, message: '' });
   const priceInputRef = useRef();
@@ -13,7 +13,39 @@ const ExpenseForm = () => {
   const [isUpdate, setIsUpdate] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
 
-  const formHandler = (event) => {
+  useEffect(() => {
+    if (user) {
+      fetchExpenses();
+    }
+  }, [user]);
+
+  const fetchExpenses = async () => {
+    try {
+      const response = await fetch(
+        `https://expense-tracker-582d5-default-rtdb.firebaseio.com/expenses/${user.localId}.json`
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch expenses');
+      }
+
+      const data = await response.json();
+      const loadedExpenses = [];
+
+      for (const key in data) {
+        loadedExpenses.push({
+          id: key,
+          ...data[key],
+        });
+      }
+
+      setExpenses(loadedExpenses);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  const formHandler = async (event) => {
     event.preventDefault();
     const newExpense = {
       price: priceInputRef.current.value,
@@ -21,17 +53,51 @@ const ExpenseForm = () => {
       cat: catInputRef.current.value,
     };
 
-    if (isUpdate) {
-      const updatedExpenses = expenses.map((expense, index) =>
-        index === editIndex ? newExpense : expense
-      );
-      setExpenses(updatedExpenses);
-      setIsUpdate(false);
-      setEditIndex(null);
-      setShowAlert({ active: true, message: 'Expense updated successfully' });
-    } else {
-      setExpenses([...expenses, newExpense]);
-      setShowAlert({ active: true, message: 'Expense added successfully' });
+    try {
+      let response;
+
+      if (isUpdate) {
+        const expenseId = expenses[editIndex].id;
+        response = await fetch(
+          `https://expense-tracker-582d5-default-rtdb.firebaseio.com/expenses/${user.localId}/${expenseId}.json`,
+          {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newExpense),
+          }
+        );
+
+        const updatedExpenses = expenses.map((expense, index) =>
+          index === editIndex ? { ...newExpense, id: expenseId } : expense
+        );
+        setExpenses(updatedExpenses);
+        setIsUpdate(false);
+        setEditIndex(null);
+        setShowAlert({ active: true, message: 'Expense updated successfully' });
+      } else {
+        response = await fetch(
+          `https://expense-tracker-582d5-default-rtdb.firebaseio.com/expenses/${user.localId}.json`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newExpense),
+          }
+        );
+
+        const data = await response.json();
+        setExpenses([...expenses, { ...newExpense, id: data.name }]);
+        setShowAlert({ active: true, message: 'Expense added successfully' });
+      }
+
+      if (!response.ok) {
+        throw new Error('Failed to save expense');
+      }
+    } catch (error) {
+      console.error(error.message);
     }
 
     priceInputRef.current.value = '';
@@ -46,6 +112,28 @@ const ExpenseForm = () => {
     catInputRef.current.value = expenseToEdit.cat;
     setIsUpdate(true);
     setEditIndex(index);
+  };
+
+  const deleteHandler = async (index) => {
+    try {
+      const expenseId = expenses[index].id;
+      const response = await fetch(
+        `https://expense-tracker-582d5-default-rtdb.firebaseio.com/expenses/${user.localId}/${expenseId}.json`,
+        {
+          method: 'DELETE',
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to delete expense');
+      }
+
+      const updatedExpenses = expenses.filter((_, i) => i !== index);
+      setExpenses(updatedExpenses);
+      setShowAlert({ active: true, message: 'Expense deleted successfully' });
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
   if (!isLoggedIn) {
@@ -102,7 +190,7 @@ const ExpenseForm = () => {
           </Button>
         </div>
       </Form>
-      <ExpenseList expenses={expenses} editHandler={editHandler} />
+      <ExpenseList expenses={expenses} editHandler={editHandler} deleteHandler={deleteHandler} />
     </div>
   );
 };
