@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../Auth/AuthContext';
 import ExpenseForm from './ExpenseForm';
 
-const Header = ({ handleEmailVerification, updateProfile }) => {
+const Header = ({ handleEmailVerification }) => {
   const { logout } = useAuth();
 
   return (
@@ -17,10 +17,7 @@ const Header = ({ handleEmailVerification, updateProfile }) => {
           <Col className="bg-danger bg-opacity-25 p-1 rounded">
             <i>
               Your Profile is incomplete.{' '}
-              <Link
-                to="/update-profile"
-                onClick={() => updateProfile}
-               >
+              <Link to="/update-profile">
                 Complete now
               </Link>
             </i>
