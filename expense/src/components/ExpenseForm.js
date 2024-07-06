@@ -75,8 +75,6 @@ const ExpenseForm = () => {
         setExpenses(updatedExpenses);
         setIsUpdate(false);
         setEditIndex(null);
-
-        //shoe edit expense message
         setShowAlert({ active: true, message: 'Expense updated successfully' });
       } else {
         response = await fetch(
@@ -107,7 +105,6 @@ const ExpenseForm = () => {
     catInputRef.current.value = '';
   };
 
-  //edit expense item
   const editHandler = (index) => {
     const expenseToEdit = expenses[index];
     priceInputRef.current.value = expenseToEdit.price;
@@ -117,7 +114,6 @@ const ExpenseForm = () => {
     setEditIndex(index);
   };
 
-  //delete expense item
   const deleteHandler = async (index) => {
     try {
       const expenseId = expenses[index].id;
@@ -134,8 +130,6 @@ const ExpenseForm = () => {
 
       const updatedExpenses = expenses.filter((_, i) => i !== index);
       setExpenses(updatedExpenses);
-
-      //show delete expense message
       setShowAlert({ active: true, message: 'Expense deleted successfully' });
     } catch (error) {
       console.error(error.message);

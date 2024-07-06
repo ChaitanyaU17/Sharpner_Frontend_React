@@ -1,48 +1,29 @@
 import React from 'react';
-import { RouterProvider, createBrowserRouter, Navigate } from 'react-router-dom';
-import Signup from './components/Signup';
+import { Provider } from 'react-redux';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './Auth/AuthContext';
+import {store} from './Store/index';
 import Header from './components/Header';
 import UpdateProfile from './components/UpdateProfile';
 import ForgetPassword from './components/ForgetPassword';
-import ExpenseForm from './components/ExpenseForm';
-import { AuthProvider, useAuth } from './Auth/AuthContext';
+//import ExpenseForm from './components/ExpenseForm';
+import Signup from './components/Signup';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-const RouterComponent = () => {
-  const { isLoggedIn } = useAuth();
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: isLoggedIn ? <Header /> : <Navigate to="/signup" replace />,
-      children: [
-        {
-          path: "update-profile",
-          element: <UpdateProfile />
-        },
-        {
-          path: "/",
-          element: <ExpenseForm />
-        }
-      ]
-    },
-    {
-      path: "/signup",
-      element: isLoggedIn ? <Navigate to="/" replace /> : <Signup />,
-    },
-    {
-      path: "/forget-password",
-      element: <ForgetPassword />
-    }
-  ]);
-
-  return <RouterProvider router={router} />;
-};
 
 const App = () => {
   return (
-    <AuthProvider>
-      <RouterComponent />
-    </AuthProvider>
+    <Provider store={store}>
+      <AuthProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Header />} />
+            <Route path="/update-profile" element={<UpdateProfile />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/forget-password" element={<ForgetPassword />} />
+          </Routes>
+        </Router>
+      </AuthProvider>
+    </Provider>
   );
 };
 

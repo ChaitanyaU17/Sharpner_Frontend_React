@@ -3,6 +3,7 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../Auth/AuthContext';
 import ExpenseForm from './ExpenseForm';
+import Signup from './Signup';
 
 const Header = ({ handleEmailVerification }) => {
   const { logout } = useAuth();
@@ -31,9 +32,9 @@ const Header = ({ handleEmailVerification }) => {
             </Button>
           </Col>
           <Col sm={2} className="d-flex justify-content-end">
-            <Button className="bg-danger" onClick={logout}>
-              Logout
-            </Button>
+           <Link to='/signup'><Button className="bg-danger" onClick={logout}> Logout
+           </Button></Link> 
+             
           </Col>
         </Row>
       </Container>

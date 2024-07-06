@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     setIsLoggedIn(false);
-    localStorage.removeItem('idToken'); // Corrected to pass 'idToken'
+    localStorage.removeItem('idToken');
   };
 
   const value = {
