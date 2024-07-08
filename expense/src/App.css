@@ -1,0 +1,15 @@
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+  }
+  
+  .light-theme {
+    --background-color: #ffffff;
+    --text-color: #000000;
+  }
+  
+  .dark-theme {
+    --background-color: #333333;
+    --text-color: #ffffff;
+  }
+  

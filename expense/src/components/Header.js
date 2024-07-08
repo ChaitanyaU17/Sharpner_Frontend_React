@@ -3,7 +3,7 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../Auth/AuthContext';
 import ExpenseForm from './ExpenseForm';
-import Signup from './Signup';
+//import Signup from './Signup';
 
 const Header = ({ handleEmailVerification }) => {
   const { logout } = useAuth();

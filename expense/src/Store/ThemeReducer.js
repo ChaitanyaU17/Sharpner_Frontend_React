@@ -1,23 +1,17 @@
 const initialState = {
-    darkMode: false,
-  };
-  
-  const themeReducer = (state = initialState, action) => {
-    switch (action.type) {
-      case 'TOGGLE_THEME':
-        return {
-          ...state,
-          darkMode: !state.darkMode,
-        };
-      default:
-        return state;
-    }
-  };
+  darkTheme: false,
+};
 
-  export const toggleTheme = () => ({
-    type: 'TOGGLE_THEME',
-  });
-  
-  
-  export default themeReducer;
-  
+const themeReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case 'TOGGLE_THEME':
+      return {
+        ...state,
+        darkTheme: !state.darkTheme,
+      };
+    default:
+      return state;
+  }
+};
+
+export default themeReducer;
