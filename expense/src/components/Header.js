@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Alert } from "react-bootstrap";
 import { Outlet } from "react-router-dom";
 import { useDispatch} from "react-redux";
-import { AuthActions } from "../store/AuthReducer";
+import { AuthActions } from "../Store/AuthReducer";
 
 const Header = (props) => {
   const dispatch = useDispatch();

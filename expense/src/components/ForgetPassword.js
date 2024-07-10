@@ -1,7 +1,7 @@
 import { Container, Form, Row, Col, Button, Toast, ToastContainer } from "react-bootstrap";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-const ForgetPass = () => {
+const ForgetPassword = () => {
   const emailInputRef = useRef();
   const navigate = useNavigate();
   const [showError, setShowError] = useState({ active: false, message: "" });
@@ -63,4 +63,4 @@ const ForgetPass = () => {
     </Container>
   );
 };
-export default ForgetPass;
+export default ForgetPassword;

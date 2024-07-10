@@ -5,7 +5,7 @@ import { Toast, ToastContainer } from "react-bootstrap";
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { AuthActions } from "../store/AuthReducer";
+import { AuthActions } from "../Store/AuthReducer";
 import './Signup.css'
 
 function Signup() {

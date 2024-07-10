@@ -1,12 +1,7 @@
-import { createStore, combineReducers } from 'redux';
-import authReducer from './AuthReducer';
-import expenseReducer from './ExpenseReducer';
-import themeReducer from './ThemeReducer';
-
-const rootReducer = combineReducers({
-  auth: authReducer,
-  expenses: expenseReducer,
-  theme: themeReducer,
-});
-
-export const store = createStore(rootReducer);
+import { configureStore } from "@reduxjs/toolkit";
+import authReducer from "./AuthReducer";
+import ExpenseReducer from "./ExpenseReducer";
+const store = configureStore({
+    reducer: { authentication: authReducer, expense:ExpenseReducer  }
+})
+export default store;

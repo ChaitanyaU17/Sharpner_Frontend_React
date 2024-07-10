@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { ExpenseSliceActions } from "../store/ExpenseReducer";
+import { ExpenseSliceActions } from "../Store/ExpenseReducer";
 
 function ExpenseForm() {
   const userId = useSelector(state => state.authentication.userId)

@@ -3,7 +3,8 @@ import { useEffect, useLayoutEffect } from "react";
 import Table from "react-bootstrap/Table";
 import { Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { ExpenseSliceActions } from "../store/ExpenseReducer";
+import { ExpenseSliceActions } from "../Store/ExpenseReducer";
+
 function ExpenseTable(props) {
   const storeExpenseList = useSelector(state => state.expense.list);
   const isPremiumActivate = useSelector(state => state.expense.activatePremium);
