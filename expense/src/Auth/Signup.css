@@ -1,0 +1,39 @@
+.signup-background {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .expense-tracker-text {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+  
+  .expense-tracker-text h1 {
+    font-size: 6rem;
+    color: rgba(0, 128, 0, 0.1); /* Light green color for background text */
+    margin: 0;
+  }
+  
+  .signup-card {
+    position: relative;
+    z-index: 1;
+  }
+  
+  .expense-tracker-text .expense {
+    margin-right: auto;
+    padding-left: 20px; /* Adjust as needed */
+  }
+  
+  .expense-tracker-text .tracker {
+    margin-left: auto;
+    padding-right: 20px; /* Adjust as needed */
+  }
+  

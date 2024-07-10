@@ -1,155 +1,96 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { Form, Button } from 'react-bootstrap';
-import { useAuth } from '../Auth/AuthContext';
-import ExpenseList from './ExpenseList';
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import ExpenseTable from "./ExpenseList";
+import { useRef, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { ExpenseSliceActions } from "../store/ExpenseReducer";
 
-const ExpenseForm = () => {
-  const { isLoggedIn, user } = useAuth();
-  const [expenses, setExpenses] = useState([]);
-  const [showAlert, setShowAlert] = useState({ active: false, message: '' });
+function ExpenseForm() {
+  const userId = useSelector(state => state.authentication.userId)
+
+  const dispatch = useDispatch();
+  const history = useNavigate();
   const priceInputRef = useRef();
   const desInputRef = useRef();
-  const catInputRef = useRef();
+  const cateInputRef = useRef();
+  const [showAlert, setShowAlert] = useState({ message: "", active: false });
   const [isUpdate, setIsUpdate] = useState(false);
-  const [editIndex, setEditIndex] = useState(null);
 
-  useEffect(() => {
-    if (user) {
-      fetchExpenses();
-    }
-  }, [user]);
-
-  const fetchExpenses = async () => {
-    try {
-      const response = await fetch(
-        `https://expense-tracker-582d5-default-rtdb.firebaseio.com/expenses/${user.localId}.json`
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch expenses');
-      }
-
-      const data = await response.json();
-      const loadedExpenses = [];
-
-      for (const key in data) {
-        loadedExpenses.push({
-          id: key,
-          ...data[key],
-        });
-      }
-
-      setExpenses(loadedExpenses);
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
-
-  const formHandler = async (event) => {
-    event.preventDefault();
-    const newExpense = {
-      price: priceInputRef.current.value,
-      des: desInputRef.current.value,
-      cat: catInputRef.current.value,
-    };
-
-    try {
-      let response;
-
-      if (isUpdate) {
-        const expenseId = expenses[editIndex].id;
-        response = await fetch(
-          `https://expense-tracker-582d5-default-rtdb.firebaseio.com/expenses/${user.localId}/${expenseId}.json`,
-          {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newExpense),
-          }
-        );
-
-        const updatedExpenses = expenses.map((expense, index) =>
-          index === editIndex ? { ...newExpense, id: expenseId } : expense
-        );
-        setExpenses(updatedExpenses);
-        setIsUpdate(false);
-        setEditIndex(null);
-        setShowAlert({ active: true, message: 'Expense updated successfully' });
-      } else {
-        response = await fetch(
-          `https://expense-tracker-582d5-default-rtdb.firebaseio.com/expenses/${user.localId}.json`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newExpense),
-          }
-        );
-
-        const data = await response.json();
-        setExpenses([...expenses, { ...newExpense, id: data.name }]);
-        setShowAlert({ active: true, message: 'Expense added successfully' });
-      }
-
-      if (!response.ok) {
-        throw new Error('Failed to save expense');
-      }
-    } catch (error) {
-      console.error(error.message);
-    }
-
-    priceInputRef.current.value = '';
-    desInputRef.current.value = '';
-    catInputRef.current.value = '';
-  };
-
-  const editHandler = (index) => {
-    const expenseToEdit = expenses[index];
-    priceInputRef.current.value = expenseToEdit.price;
-    desInputRef.current.value = expenseToEdit.des;
-    catInputRef.current.value = expenseToEdit.cat;
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const editHandler = id => {
+    history("/?id=" + id);
     setIsUpdate(true);
-    setEditIndex(index);
+    axios
+      .get(
+        `https://expense-tracker-582d5-default-rtdb.firebaseio.com/${userId}/${id}.json`
+      )
+      .then(res => {
+        priceInputRef.current.value = res.data.price;
+        desInputRef.current.value = res.data.des;
+        cateInputRef.current.value = res.data.cat;
+      });
   };
-
-  const deleteHandler = async (index) => {
-    try {
-      const expenseId = expenses[index].id;
-      const response = await fetch(
-        `https://expense-tracker-582d5-default-rtdb.firebaseio.com/expenses/${user.localId}/${expenseId}.json`,
+  const formHandler = async e => {
+    e.preventDefault();
+    if (isUpdate) {
+      const updateId = queryParams.get("id");
+      
+      await axios.put(
+        `https://expense-tracker-582d5-default-rtdb.firebaseio.com/${userId}/${updateId}.json`,
         {
-          method: 'DELETE',
+          price: priceInputRef.current.value,
+          des: desInputRef.current.value,
+          cat: cateInputRef.current.value
         }
       );
 
-      if (!response.ok) {
-        throw new Error('Failed to delete expense');
-      }
+      setShowAlert({ message: "Updated SuccessFully", active: true });
+      setIsUpdate(false)
+      setTimeout(() => {
+        setShowAlert({ message: "", active: false });
 
-      const updatedExpenses = expenses.filter((_, i) => i !== index);
-      setExpenses(updatedExpenses);
-      setShowAlert({ active: true, message: 'Expense deleted successfully' });
-    } catch (error) {
-      console.error(error.message);
+        priceInputRef.current.value = "";
+        desInputRef.current.value = "";
+        cateInputRef.current.value = "";
+        history("/");
+      }, 2000);
+    } else {
+      const obj = {
+        price: priceInputRef.current.value,
+        des: desInputRef.current.value,
+        cat: cateInputRef.current.value
+      };
+      const data = await axios
+        .post(
+          `https://expense-tracker-582d5-default-rtdb.firebaseio.com/${userId}.json`,
+          obj
+        )
+        .then(res => res.data)
+        .catch(err => console.log(err));
+      if (data) {
+        dispatch(ExpenseSliceActions.newExpense(obj))
+        setShowAlert({ message: "Expenses Added SuccessFully", active: true });
+        setTimeout(() => {
+          setShowAlert({ message: "", active: false });
+        }, 2000);
+        priceInputRef.current.value = "";
+        desInputRef.current.value = "";
+        cateInputRef.current.value = "";
+      }
     }
   };
-
-  if (!isLoggedIn) {
-    return <div>Please log in to add expenses.</div>;
-  }
-
   return (
-    <div className='mt-4'>
-      {showAlert.active && (
+    <div>
+      {showAlert.active &&
         <div className="alert alert-dark w-50 mx-auto" role="alert">
           {showAlert.message}
-        </div>
-      )}
+        </div>}
       <Form
-        className="w-50 mx-auto mb-3"
-        style={{ background: "#008067", borderRadius: "24px" }}
+        className="w-50 mx-auto mb-3 bg-success bg-opacity-75"
+        style={{ borderRadius: "24px" }}
         onSubmit={formHandler}
       >
         <div className="ps-3 pe-4">
@@ -176,7 +117,7 @@ const ExpenseForm = () => {
             aria-label="Default select example"
             className="mb-3"
             required
-            ref={catInputRef}
+            ref={cateInputRef}
           >
             <option>Select Category</option>
             <option value="Food">Food</option>
@@ -185,14 +126,14 @@ const ExpenseForm = () => {
             <option value="Shopping">Shopping</option>
             <option value="Salary">Salary</option>
           </Form.Select>
-          <Button variant="primary" type="submit" className="mb-3 w-100">
-            {isUpdate ? "Update Expense" : "Add Expense"}
+          <Button type="submit" className="mb-3 w-100 btn-success bg-opacity-75 border-white">
+            {isUpdate ? "Update" : "Add Expense"}
           </Button>
         </div>
       </Form>
-      <ExpenseList expenses={expenses} editHandler={editHandler} deleteHandler={deleteHandler} />
+      <ExpenseTable  editHandler={editHandler} isUpdate={isUpdate}/>
     </div>
   );
-};
+}
 
 export default ExpenseForm;
