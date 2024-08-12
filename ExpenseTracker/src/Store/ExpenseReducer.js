@@ -1,8 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 const initialState = {
     activatePremium : false,
     list: []
 };
+
 const ExpenseSlice = createSlice({
   name: "expense",
   initialState,
@@ -12,5 +14,6 @@ const ExpenseSlice = createSlice({
     activatePremium:(state)=>{state.activatePremium=!state.activatePremium}
   }
 });
+
 export const ExpenseSliceActions = ExpenseSlice.actions;
 export default ExpenseSlice.reducer;

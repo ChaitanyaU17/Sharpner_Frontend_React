@@ -14,9 +14,10 @@ const Header = (props) => {
   const handleEmailVerification = async () => {
     setError('');
     setEmailSent(false);
+    
     try {
       const response = await fetch(
-        'https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyANERKoLhs3lYRdOUUuhTC2iH9FUv-oLT0',
+        'https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCOiLvoGRRacwZSQXr4IeZ1qhMhzlE6w_M',
         {
           method: 'POST',
           headers: {
@@ -24,7 +25,7 @@ const Header = (props) => {
           },
           body: JSON.stringify({
             requestType: 'VERIFY_EMAIL',
-            idToken: localStorage.getItem('idToken'), // Ensure idToken is correctly stored in localStorage
+            idToken: localStorage.getItem('idToken'), 
           }),
         }
       );
@@ -43,6 +44,7 @@ const Header = (props) => {
     dispatch(AuthActions.logout())
 
   }
+
   return (
     <Container fluid>
       <Row className="mt-3">
@@ -62,6 +64,7 @@ const Header = (props) => {
         </Col>
       </Row>
       <hr />
+      
       {emailSent && (
         <Container className="mt-4">
           <Alert variant="success">

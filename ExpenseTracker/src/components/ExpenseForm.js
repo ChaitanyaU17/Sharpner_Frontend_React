@@ -17,29 +17,26 @@ function ExpenseForm() {
   const cateInputRef = useRef();
   const [showAlert, setShowAlert] = useState({ message: "", active: false });
   const [isUpdate, setIsUpdate] = useState(false);
-
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
+
   const editHandler = id => {
     history("/?id=" + id);
     setIsUpdate(true);
-    axios
-      .get(
-        `https://expense-tracker-582d5-default-rtdb.firebaseio.com/${userId}/${id}.json`
-      )
+    axios.get(`https://expenses-b1357-default-rtdb.firebaseio.com/${userId}/${id}.json`)
       .then(res => {
         priceInputRef.current.value = res.data.price;
         desInputRef.current.value = res.data.des;
         cateInputRef.current.value = res.data.cat;
       });
   };
-  const formHandler = async e => {
+  
+  const formHandler = async (e) => {
     e.preventDefault();
     if (isUpdate) {
       const updateId = queryParams.get("id");
       
-      await axios.put(
-        `https://expense-tracker-582d5-default-rtdb.firebaseio.com/${userId}/${updateId}.json`,
+      await axios.put(`https://expenses-b1357-default-rtdb.firebaseio.com/${userId}/${updateId}.json`,
         {
           price: priceInputRef.current.value,
           des: desInputRef.current.value,
@@ -63,13 +60,12 @@ function ExpenseForm() {
         des: desInputRef.current.value,
         cat: cateInputRef.current.value
       };
-      const data = await axios
-        .post(
-          `https://expense-tracker-582d5-default-rtdb.firebaseio.com/${userId}.json`,
-          obj
-        )
+      const data = await axios.post(
+          `https://expenses-b1357-default-rtdb.firebaseio.com/${userId}.json`, obj )
+
         .then(res => res.data)
         .catch(err => console.log(err));
+        
       if (data) {
         dispatch(ExpenseSliceActions.newExpense(obj))
         setShowAlert({ message: "Expenses Added SuccessFully", active: true });
@@ -82,6 +78,7 @@ function ExpenseForm() {
       }
     }
   };
+
   return (
     <div>
       {showAlert.active &&

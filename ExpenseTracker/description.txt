@@ -1,0 +1,58 @@
+Questions on React and Redux
+Q: What is React?
+
+A: React is a JavaScript library for building user interfaces. It allows developers to create reusable UI components and manage the state of the application efficiently.
+Q: What is Redux and why do you use it?
+
+A: Redux is a state management library for JavaScript applications. It helps manage the application state in a predictable way, making it easier to manage and debug state changes.
+Q: How do you use useRef in React?
+
+A: useRef is a hook that allows you to directly access a DOM element or keep a mutable object that doesn't cause re-renders when updated. For example, in a form, you can use useRef to get the input field values without triggering a component re-render.
+Questions on Firebase Authentication
+Q: How do you handle user authentication in your application?
+
+A: We use Firebase Authentication to handle user authentication. Users can sign up, log in, and reset their passwords using Firebase's authentication services.
+Q: How do you secure your authentication tokens?
+
+A: Authentication tokens are stored in the local storage for session management. However, storing tokens in local storage can have security implications, so it’s important to manage token expiration and renewal properly.
+Questions on State Management and Routing
+Q: How do you manage state in your React application?
+
+A: We use Redux to manage the state of our React application. It helps to maintain a single source of truth for the application state and makes state updates predictable through actions and reducers.
+Q: How do you implement navigation in your application?
+
+A: We use React Router to handle navigation between different pages in our application. It provides a declarative way to navigate and manage routes in a React application.
+Questions on Form Handling and Validation
+Q: How do you handle form submissions in React?
+
+A: We handle form submissions by attaching an onSubmit handler to the form element. This handler prevents the default form submission behavior and allows us to perform custom logic, such as validation and sending data to the server.
+Q: How do you validate form inputs in your application?
+
+A: We perform validation both on the client side, using JavaScript to check for things like matching passwords, and on the server side to ensure the data is correct and secure before processing it.
+Questions on Styling and UI Components
+Q: What libraries do you use for styling your application?
+
+A: We use Bootstrap for styling our application. Additionally, we can use custom CSS for specific styling needs.
+Q: How do you display error messages to the user?
+
+A: We use Bootstrap’s Toast component to display error messages. This provides a user-friendly way to show notifications at the top of the screen.
+Questions on API Integration
+Q: How do you handle API requests in your application?
+
+A: We use the fetch API and axios library to make HTTP requests to our backend services. These requests are made to Firebase endpoints for authentication and data management.
+Q: How do you update the user profile in your application?
+
+A: To update the user profile, we make a POST request to Firebase’s update endpoint with the new profile information and the user’s authentication token.
+Questions on Project Structure and Best Practices
+Q: How is your project structured?
+
+A: Our project is structured with separate folders for components, authentication, and Redux-related files (reducers, actions, and store). This helps keep the code organized and maintainable.
+Q: What are some best practices you follow in your React project?
+
+A: Some best practices include:
+Keeping components small and focused on a single responsibility.
+Using Redux for state management to avoid prop drilling.
+Writing reusable components.
+Keeping the code clean and well-documented.
+Ensuring proper error handling and user feedback.
+These questions and answers should help you prepare for interviews based on the information from your project.

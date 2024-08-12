@@ -8,7 +8,8 @@ import { ExpenseSliceActions } from "../Store/ExpenseReducer";
 function ExpenseTable(props) {
   const storeExpenseList = useSelector(state => state.expense.list);
   const isPremiumActivate = useSelector(state => state.expense.activatePremium);
-  const userId = useSelector(state=>state.authentication.userId)
+  const userId = useSelector(state => state.authentication.userId);
+  
   useLayoutEffect(() => {
     if (isPremiumActivate) {
       document.body.style.backgroundColor = "black";
@@ -20,10 +21,11 @@ function ExpenseTable(props) {
   });
   
   const dispatch = useDispatch();
+  
   const getData = async () => {
     let arr = [];
     await fetch(
-      `https://expense-tracker-582d5-default-rtdb.firebaseio.com/${userId}.json`
+      `https://expenses-b1357-default-rtdb.firebaseio.com/${userId}.json`
     ).then(res=>res.json()).then(data => {
         for (let obj in data) {
           arr.push({ id: obj, ...data[obj] });
@@ -35,18 +37,21 @@ function ExpenseTable(props) {
       dispatch(ExpenseSliceActions.fetchExpense(arr));
     }
   };
+
   useEffect(() => {
     if(!props.isUpdate){
     getData();}
   }, [props.isUpdate]);
+  
   const handleDelete = async id => {
     await fetch(
-      `https://expense-tracker-582d5-default-rtdb.firebaseio.com/${userId}/${id}.json`,{
+      `https://expenses-b1357-default-rtdb.firebaseio.com/${userId}/${id}.json`,{
         method: 'DELETE'
       }
     );
     getData();
   };
+
   function makeCSV(data) {
     const arr = [["price", "des", "cat"]];
     for (let list of data) {
@@ -58,8 +63,10 @@ function ExpenseTable(props) {
     }
     return arr.map(r=>r).join('\n');
   }
+
   const blob1 = new Blob([makeCSV(storeExpenseList)]);
   const blob2 = new Blob(["Thanks for downloading"])
+
   return (
     <div className="w-80">
       <h1>Expense List</h1>

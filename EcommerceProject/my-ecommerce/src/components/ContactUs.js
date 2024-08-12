@@ -8,6 +8,7 @@ const ContactUs = () => {
         pno:''
       });
       const [showalert, setshowalert] = useState({active:false,message:'',variant:''})
+      
       const showDetail =async(e) => {
         e.preventDefault();
         if(contactDetail.name!=='' && contactDetail.email!==''&& contactDetail.pno!==''){

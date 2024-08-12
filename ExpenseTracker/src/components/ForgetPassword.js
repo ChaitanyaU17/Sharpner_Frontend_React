@@ -6,10 +6,11 @@ const ForgetPassword = () => {
   const emailInputRef = useRef();
   const navigate = useNavigate();
   const [showError, setShowError] = useState({ active: false, message: "" });
+  
   const InputHandler = async e => {
     e.preventDefault();
     await fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyANERKoLhs3lYRdOUUuhTC2iH9FUv-oLT0",
+      "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCOiLvoGRRacwZSQXr4IeZ1qhMhzlE6w_M",
       {
         method: "POST",
         headers: {
@@ -28,6 +29,7 @@ const ForgetPassword = () => {
         navigate('/signup')
       });
   };
+
   return (
     <Container>
       <h2>Forget Password</h2>
@@ -46,6 +48,7 @@ const ForgetPassword = () => {
           Back to Signup
         </Button>
       </Form>
+
       {showError.active &&
         <ToastContainer
           className="p-3"
@@ -61,7 +64,9 @@ const ForgetPassword = () => {
             </Toast.Body>
           </Toast>
         </ToastContainer>}
+        
     </Container>
   );
 };
+
 export default ForgetPassword;
