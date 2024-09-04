@@ -1,13 +1,15 @@
 import React, { useRef, useState } from 'react'
 import { Button, Container } from 'react-bootstrap';
 import { Editor } from 'react-draft-wysiwyg';
-// import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { EditorState, convertToRaw } from 'react-draft-wysiwyg';
+import fetchMail from '../hooks/useFetch';
+import { sentActions } from '../store/sentSlice';
 
 const ComposeMail = () => {
     const toRef = useRef();
     const subjectRef = useRef();
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
     const [editorState, setEditorState] = useState(() =>
          EditorState.createEmpty());
@@ -70,8 +72,8 @@ const ComposeMail = () => {
         subjectRef.current.value = "";
         setEditorState(() => EditorState.createEmpty());
 
-        // data = await fetchMail(localStorage.getItem("email"), "sent");
-        // dispatch(sentActions.setSent())
+        data = await fetchMail(localStorage.getItem("email"), "sent");
+        dispatch(sentActions.setSent())
     };
 
   return (
