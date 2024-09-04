@@ -14,37 +14,42 @@ const Login = () => {
     e.preventDefault();
 
     const email = emailRef.current.value;
-    const passsword = passwordRef.current.value;
+    const password = passwordRef.current.value;
 
     setLoading(true);
 
-    const res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_KEY}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email: email,
-        passsword: passsword,
-        returnSecureToken: true,
-      }),
+    const res = await fetch(
+      `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_KEY}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+          returnSecureToken: true,
+        }),
+      }
+    );
+    setLoading(false);
+
+    const data = await res.json();
+    if (res.ok) {
+      authctx.addIdToken(data.idToken);
+      authctx.addEmail(email);
+      // Redirect to home page
+      navigate('/home');
+    } else {
+      let errorMsg = 'Authentication failed.';
+      if (data && data.error && data.error.message) {
+        errorMsg = data.error.message;
+      }
+      alert(errorMsg);
     }
-  );
-  setLoading(false);
-  const data = await res.json();
-  if(res.ok) {
-    navigate('/home');
-    authctx.addIdToken(data.idToken);
-    authctx.addEmail(email);
-  } else {
-    let errorMsg = 'Authentication failed.';
-    if (data && data.error && data.error.message) {
-      errorMsg = data.error.message;
-    }
-    alert(errorMsg);
-  }
-    email.current.value = '';
-    passsword.current.value = '';
+
+    emailRef.current.value = '';
+    passwordRef.current.value = '';
   }
 
   return (

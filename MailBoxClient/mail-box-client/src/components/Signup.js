@@ -1,13 +1,14 @@
 import React, { useContext, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../store/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
   const [loading, setLoading] = useState(false);
-
+  const navigate = useNavigate();
   const authctx = useContext(AuthContext);
 
   const submitHandler = async (event) => {
@@ -17,19 +18,22 @@ const Signup = () => {
     const password = passwordRef.current.value;
     const confirmPassword = confirmPasswordRef.current.value;
 
+    // Check if passwords match
     if (password !== confirmPassword) {
       alert("Passwords don't match");
-      passwordRef.current.value = "";
-      confirmPasswordRef.current.value = "";
-    } else {
-      setLoading(true);
+      return; // Prevent submission
+    }
+
+    setLoading(true);
+
+    try {
       const res = await fetch(
         `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_KEY}`,
         {
           method: "POST",
           body: JSON.stringify({
-            email: email,
-            password: password,
+            email,
+            password,
             returnSecureToken: true,
           }),
           headers: {
@@ -37,11 +41,14 @@ const Signup = () => {
           },
         }
       );
-      setLoading(false);
+
       const data = await res.json();
+      setLoading(false);
+
       if (res.ok) {
         authctx.addIdToken(data.idToken);
         authctx.addEmail(email);
+        navigate('/login');
       } else {
         let errMessage = "Authentication Failed...";
         if (data && data.error && data.error.message) {
@@ -49,6 +56,9 @@ const Signup = () => {
         }
         alert(errMessage);
       }
+    } catch (error) {
+      setLoading(false);
+      alert('Something went wrong. Please try again later.');
     }
 
     emailRef.current.value = "";
@@ -61,7 +71,7 @@ const Signup = () => {
       <div className="row justify-content-center">
         <div className="col-md-6 shadow-lg p-5 mt-3 rounded-5">
           <h2 className="text-center mb-4">Signup</h2>
-          <form onClick={submitHandler}>
+          <form onSubmit={submitHandler}> {/* Corrected from onClick to onSubmit */}
             <div className="form-group mb-3">
               <label htmlFor="email">Email address</label>
               <input
@@ -96,7 +106,7 @@ const Signup = () => {
               />
             </div>
             {loading ? (
-              <button type="submit" className="btn btn-primary w-100">
+              <button type="submit" className="btn btn-primary w-100" disabled>
                 Loading...
               </button>
             ) : (
