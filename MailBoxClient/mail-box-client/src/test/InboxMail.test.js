@@ -1,51 +1,75 @@
 import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import InboxMail from './InboxMail';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import InboxMail from '../components/InboxMail';
 import store from '../store/store';
 
-test('renders mail content correctly', () => {
+describe('InboxMail Component', () => {
   
-  const mockMails = [
-    ['mailId123', { from: 'test@example.com', header: 'Test Subject', content: JSON.stringify({
-      blocks: [
-        {
-          key: '5g7i9',
-          text: 'Test content of the mail',
-          type: 'unstyled',
-          depth: 0,
-          inlineStyleRanges: [],
-          entityRanges: [],
-          data: {},
-        },
-      ],
-      entityMap: {},
-    }), read: true }]
-  ];
+  // Test Case 1: Render Mail Details Properly
+  it('renders mail details (From, Subject, Content)', () => {
+    const mockMails = [
+      ['1', { from: 'test@example.com', header: 'Test Subject', content: '{"blocks":[{"text":"Test Content"}],"entityMap":{}}', read: false }]
+    ];
 
-  // Mock the Redux state
-  const mockState = {
-    inbox: {
-      mails: mockMails,
-    },
-  };
+    render(
+      <Provider store={store}>
+        <MemoryRouter initialEntries={['/inbox/1']}>
+          <Routes>
+            <Route path="/inbox/:mailId" element={<InboxMail />} />
+          </Routes>
+        </MemoryRouter>
+      </Provider>
+    );
 
-  // Mock useSelector
-  jest.mock('react-redux', () => ({
-    ...jest.requireActual('react-redux'),
-    useSelector: jest.fn().mockImplementation((selector) => selector(mockState)),
-  }));
+    expect(screen.getByText(/From:/i)).toHaveTextContent('test@example.com');
+    expect(screen.getByText(/Subject:/i)).toHaveTextContent('Test Subject');
+    expect(screen.getByText(/Test Content/i)).toBeInTheDocument();
+  });
 
-  render(
-    <Provider store={store}>
-      <BrowserRouter>
-        <InboxMail />
-      </BrowserRouter>
-    </Provider>
-  );
+  // Test Case 2: Mark Mail as Read
+  it('marks mail as read after opening', () => {
+    const mockFetch = jest.spyOn(global, 'fetch').mockResolvedValueOnce({
+      json: () => Promise.resolve({}),
+    });
 
-  // Check that the email content is rendered
-  expect(screen.getByText('From: test@example.com')).toBeInTheDocument();
-  expect(screen.getByText('Subject: Test Subject')).toBeInTheDocument();
-  expect(screen.getByText('Test content of the mail')).toBeInTheDocument();
+    render(
+      <Provider store={store}>
+        <MemoryRouter initialEntries={['/inbox/1']}>
+          <Routes>
+            <Route path="/inbox/:mailId" element={<InboxMail />} />
+          </Routes>
+        </MemoryRouter>
+      </Provider>
+    );
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      expect.stringContaining('received'), 
+      expect.objectContaining({ method: 'PUT' })
+    );
+
+    mockFetch.mockRestore();
+  });
+
+  // Test Case 3: Load Correct Content in Editor
+  it('loads mail content into the Draft.js editor', () => {
+    const mockMails = [
+      ['1', { content: '{"blocks":[{"text":"Test Content"}],"entityMap":{}}', read: true }]
+    ];
+
+    render(
+      <Provider store={store}>
+        <MemoryRouter initialEntries={['/inbox/1']}>
+          <Routes>
+            <Route path="/inbox/:mailId" element={<InboxMail />} />
+          </Routes>
+        </MemoryRouter>
+      </Provider>
+    );
+
+    expect(screen.getByText(/Test Content/i)).toBeInTheDocument();
+  });
+
 });
+
+

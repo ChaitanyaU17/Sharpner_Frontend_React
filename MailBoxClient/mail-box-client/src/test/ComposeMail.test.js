@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import ComposeMail from './ComposeMail';
+import ComposeMail from '../components/ComposeMail';
 
 jest.mock('react-draft-wysiwyg', () => ({
   Editor: () => <div>Editor</div>,

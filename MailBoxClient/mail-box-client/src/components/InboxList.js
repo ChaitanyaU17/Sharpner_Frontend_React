@@ -24,14 +24,13 @@ const InboxList = () => {
     const unreadBadge = (read) => {
         if (!read) {
             return (
-                <Badge pill variant='primary'>
-                    Unread
-                </Badge>
+                <span style={{ color: 'blue', fontSize: '20px' }}>•</span>
             );
         } else {
             return null;
         }
     };
+    
 
     return (
         <>

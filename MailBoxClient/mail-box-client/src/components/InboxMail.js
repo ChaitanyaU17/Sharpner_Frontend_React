@@ -12,16 +12,17 @@ const InboxMail = () => {
 
     if (mail[1].read === false) {
         const email = localStorage.getItem('email');
-        fetch(`${process.env.REACT_APP_DATABASE_URL}/received$(email)/${email[0]}.json`,
+        fetch(`${process.env.REACT_APP_DATABASE_URL}/received/${email}/${params.mailId}.json`,
             {
                 method: 'PUT',
-                body: JSON.stringify({...mail[1], read: true}),
+                body: JSON.stringify({ ...mail[1], read: true }),
                 headers: {
                     'Content-Type': 'application/json',
                 },
             }
         );
     }
+    
 
     const editorStateHandler = (content) => {
         const itemContent = JSON.parse(content);

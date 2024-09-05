@@ -1,5 +1,5 @@
 import { screen, render, fireEvent } from '@testing-library/react';
-import Login from './Login';
+import Login from '../components/Login';
 
 test('prevents form submission when fields are empty', () => {
     render(<Login/>);
