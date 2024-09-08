@@ -1,107 +1,95 @@
-import React, { useContext, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import AuthContext from '../store/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useRef, useState } from "react";
+import { Container } from "react-bootstrap";
+import AuthContext from "../store/authContext";
 
-const Login = () => {
+import { Button } from "react-bootstrap";
+
+const LogIn = () => {
+  const authCtx = useContext(AuthContext);
   const emailRef = useRef();
   const passwordRef = useRef();
-  const authctx = useContext(AuthContext);
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
+  const [loading, setLoading] = useState(false);
+
+  const submitHandler = async (event) => {
+    event.preventDefault();
 
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
-
     setLoading(true);
-
     const res = await fetch(
       `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_KEY}`,
       {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        method: "POST",
         body: JSON.stringify({
           email: email,
           password: password,
           returnSecureToken: true,
         }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
     );
     setLoading(false);
-
     const data = await res.json();
     if (res.ok) {
-      authctx.addIdToken(data.idToken);
-      authctx.addEmail(email);
-      // Redirect to home page
-      navigate('/home');
+      authCtx.addIdToken(data.idToken);
+      authCtx.addEmail(email);
     } else {
-      let errorMsg = 'Authentication failed.';
+      let errMessage = "Authentication Failed...";
       if (data && data.error && data.error.message) {
-        errorMsg = data.error.message;
+        errMessage = data.error.message;
       }
-      alert(errorMsg);
+      alert(errMessage);
     }
 
-    emailRef.current.value = '';
-    passwordRef.current.value = '';
-  }
+    emailRef.current.value = "";
+    passwordRef.current.value = "";
+  };
 
   return (
-    <div className="container">
-      <div className="row justify-content-center">
-        <div className="col-md-6 shadow-lg p-5 mt-3 rounded-5">
-          <h2 className="text-center mb-4">Login</h2>
-          <form onSubmit={submitHandler}>
-            <div className="form-group mb-3">
-              <label htmlFor="email">Email address</label>
-              <input
-                type="email"
-                id="email"
-                ref={emailRef}
-                className='form-control'
-                placeholder="Enter email"
-                required
-              />
-            </div>
-            <div className="form-group mb-3">
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                id="password"
-                className='form-control'
-                ref={passwordRef}
-                placeholder="Password"
-                required
-              />
-            </div>
-            {loading ? (
-              <button type="submit" className="btn btn-primary w-100">
-              Loading...
-            </button>
-            ) : (
-              <button type="submit" className="btn btn-primary w-100">
-                Login
-              </button>
-            )}
-          </form>
-          <div className="text-center mt-3">
-            <p>
-              Don't have an account?{" "}
-              <Link to="/signup" style={{ color: "blue" }}>
-                Sign Up
-              </Link>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Container className="border border-5 w-25 rounded-3 border-secondary mt-3">
+      <h2 style={{ textAlign: "center" }}>LogIn</h2>
+      <form
+        style={{ textAlign: "center" }}
+        className="border border-secondary rounded-4"
+        onSubmit={submitHandler}
+      >
+        <label htmlFor="email" className="my-1">
+          Email
+        </label>
+        <br />
+        <input
+          type="email"
+          id="email"
+          ref={emailRef}
+          placeholder="Email"
+          required
+        />
+        <br />
+        <label htmlFor="password" className="my-1">
+          Password
+        </label>
+        <br />
+        <input
+          type="password"
+          id="password"
+          ref={passwordRef}
+          placeholder="Password"
+          required
+        />
+        <br />
+        {loading ? (
+          <p className="my-1">Loading...</p>
+        ) : (
+          <Button type="submit" className="my-1">
+            LogIn
+          </Button>
+        )}
+      </form>
+    </Container>
   );
-}
+};
 
-export default Login;
+export default LogIn;

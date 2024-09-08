@@ -1,15 +1,14 @@
-import React, { useContext, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import AuthContext from '../store/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useRef } from "react";
 
-const Signup = () => {
+import { Container, Button } from "react-bootstrap";
+import AuthContext from "../store/authContext";
+
+const SignUp = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const authctx = useContext(AuthContext);
+
+  const authCtx = useContext(AuthContext);
 
   const submitHandler = async (event) => {
     event.preventDefault();
@@ -18,22 +17,18 @@ const Signup = () => {
     const password = passwordRef.current.value;
     const confirmPassword = confirmPasswordRef.current.value;
 
-    // Check if passwords match
     if (password !== confirmPassword) {
       alert("Passwords don't match");
-      return; // Prevent submission
-    }
-
-    setLoading(true);
-
-    try {
+      passwordRef.current.value = "";
+      confirmPasswordRef.current.value = "";
+    } else {
       const res = await fetch(
         `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_KEY}`,
         {
           method: "POST",
           body: JSON.stringify({
-            email,
-            password,
+            email: email,
+            password: password,
             returnSecureToken: true,
           }),
           headers: {
@@ -41,14 +36,10 @@ const Signup = () => {
           },
         }
       );
-
       const data = await res.json();
-      setLoading(false);
-
       if (res.ok) {
-        authctx.addIdToken(data.idToken);
-        authctx.addEmail(email);
-        navigate('/login');
+        authCtx.addIdToken(data.idToken);
+        authCtx.addEmail(email);
       } else {
         let errMessage = "Authentication Failed...";
         if (data && data.error && data.error.message) {
@@ -56,9 +47,6 @@ const Signup = () => {
         }
         alert(errMessage);
       }
-    } catch (error) {
-      setLoading(false);
-      alert('Something went wrong. Please try again later.');
     }
 
     emailRef.current.value = "";
@@ -67,66 +55,55 @@ const Signup = () => {
   };
 
   return (
-    <div className="container">
-      <div className="row justify-content-center">
-        <div className="col-md-6 shadow-lg p-5 mt-3 rounded-5">
-          <h2 className="text-center mb-4">Signup</h2>
-          <form onSubmit={submitHandler}> {/* Corrected from onClick to onSubmit */}
-            <div className="form-group mb-3">
-              <label htmlFor="email">Email address</label>
-              <input
-                type="email"
-                className="form-control"
-                id="email"
-                ref={emailRef}
-                placeholder="Enter email"
-                required
-              />
-            </div>
-            <div className="form-group mb-3">
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                className="form-control"
-                id="password"
-                ref={passwordRef}
-                placeholder="Password"
-                required
-              />
-            </div>
-            <div className="form-group mb-3">
-              <label htmlFor="confirmPassword">Confirm Password</label>
-              <input
-                type="password"
-                className="form-control"
-                id="confirmPassword"
-                ref={confirmPasswordRef}
-                placeholder="Confirm Password"
-                required
-              />
-            </div>
-            {loading ? (
-              <button type="submit" className="btn btn-primary w-100" disabled>
-                Loading...
-              </button>
-            ) : (
-              <button type="submit" className="btn btn-primary w-100">
-                Signup
-              </button>
-            )}
-          </form>
-          <div className="text-center mt-3">
-            <p>
-              Already a user?{" "}
-              <Link to="/login" style={{ color: "blue" }}>
-                Login
-              </Link>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Container className="border border-5 w-25 rounded-3 border-secondary mt-3">
+      <h2 style={{ textAlign: "center" }}>SignUp</h2>
+      <form
+        style={{ textAlign: "center" }}
+        className="border border-secondary rounded-4"
+        onSubmit={submitHandler}
+      >
+        <label htmlFor="email" className="my-1">
+          Email
+        </label>
+        <br />
+        <input
+          type="email"
+          id="email"
+          ref={emailRef}
+          placeholder="Email"
+          required
+        />
+        <br />
+        <label htmlFor="password" className="my-1">
+          Password
+        </label>
+        <br />
+        <input
+          type="password"
+          id="password"
+          ref={passwordRef}
+          placeholder="Password"
+          required
+        />
+        <br />
+        <label htmlFor="confirmPassword" className="my-1">
+          Confirm Password
+        </label>
+        <br />
+        <input
+          type="password"
+          id="confirmPassword"
+          ref={confirmPasswordRef}
+          placeholder="Confirm Password"
+          required
+        />
+        <br />
+        <Button type="submit" className="my-3">
+          Sign Up
+        </Button>
+      </form>
+    </Container>
   );
-}
+};
 
-export default Signup;
+export default SignUp;

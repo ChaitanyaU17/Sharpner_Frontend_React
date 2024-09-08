@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
-const sentContext = React.createContext({
+const SentContext = React.createContext({
     mailList: [],
     setMailList: () => {},
-});
+})
 
-export default sentContext;
+export default SentContext;

@@ -1,34 +1,39 @@
-import React from 'react';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import Signup from './components/Signup';
-import Login from './components/Login';
-import Home from './pages/Home';
-import AuthProvider from './store/AuthProvider';
+import React, { useContext, useEffect } from "react";
+import "./App.css";
+import AuthPage from "./pages/Authentication";
+import AuthContext from "./store/authContext";
+import HomePage from "./pages/Home";
+import { Button } from "react-bootstrap";
+import { Route, Switch } from "react-router-dom";
+
+import Name from "./components/Name";
 
 function App() {
-  const router = createBrowserRouter([
-    {
-      path: '/signup',
-      element: <Signup />,
-    },
-    {
-      path: '/login',
-      element: <Login />,
-    },
-    {
-      path: '/',
-      element: <Signup />, // Default route to signup
-    },
-    {
-      path: '/home',
-      element: <Home />, // Route for the home page
-    },
-  ]);
+  const authCtx = useContext(AuthContext);
+
+  useEffect(() => {
+    if (localStorage.getItem("token") && localStorage.getItem("actualEmail")) {
+      authCtx.addIdToken(localStorage.getItem("token"));
+      authCtx.addEmail(localStorage.getItem("actualEmail"));
+    }
+  }, [authCtx]);
+
+  const logoutHandler = () => {
+    authCtx.removeCred();
+  };
 
   return (
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <React.Fragment>
+      <div className="position-absolute top-0 end-0">
+        {authCtx.idToken && <Button onClick={logoutHandler}>Logout</Button>}
+      </div>
+      <Switch>
+        <Route path="/test">
+          <Name />
+        </Route>
+        <Route path="/">{authCtx.idToken ? <HomePage /> : <AuthPage />}</Route>
+      </Switch>
+    </React.Fragment>
   );
 }
 

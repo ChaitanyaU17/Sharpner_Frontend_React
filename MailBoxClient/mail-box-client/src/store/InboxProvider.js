@@ -1,23 +1,24 @@
 import React, { useState } from "react";
+
 import InboxContext from "./inboxContext";
 
 const InboxProvider = (props) => {
-    const [mails, setMails] = useState([]);
+  const [mails, setMails] = useState([]);
 
-    const setMailHandler = (mailList) => {
-        setMails(mailList);
-    };
+  const setMailsHandler = (mailList) => {
+    setMails(mailList);
+  };
 
-    const inboxProvider = {
-        mailList: mails,
-        setMailList: setMailHandler,
-    };
+  const inboxProvider = {
+    mailList: mails,
+    setMailList: setMailsHandler,
+  };
 
-    return (
-        <InboxContext.Provider value={inboxProvider}>
-            {props.children}
-        </InboxContext.Provider>
-    );
+  return (
+    <InboxContext.Provider value={inboxProvider}>
+      {props.children}
+    </InboxContext.Provider>
+  );
 };
 
 export default InboxProvider;

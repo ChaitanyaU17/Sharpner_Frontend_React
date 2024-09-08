@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
-import sentContext from './sentContext';
+import React, { useState } from "react";
+
+import SentContext from "./sentContext";
 
 const SentProvider = (props) => {
-    const [mails, setMails] = useState([]);
+  const [mails, setMails] = useState([]);
 
-    const setMailsHandler = (mailList) => {
-        setMails(mailList);
-    };
+  const setMailsHandler = (mailList) => {
+    setMails(mailList);
+  };
 
-    const sentProvider = {
-        mailList: mails,
-        setMailList: setMailsHandler,
-    };
+  const sentProvider = {
+    mailList: mails,
+    setMailList: setMailsHandler,
+  };
 
-    return (
-        <sentContext.Provider value={sentProvider}>
-            {props.children}
-        </sentContext.Provider>
-    );
+  return (
+    <SentContext.Provider value={sentProvider}>
+      {props.children}
+    </SentContext.Provider>
+  );
 };
-
 
 export default SentProvider;

@@ -1,11 +1,11 @@
-import { createContext } from 'react';
+import { createContext } from "react";
 
 const AuthContext = createContext({
     idToken: null,
     email: null,
     addIdToken: () => {},
     addEmail: () => {},
-    removeCred: () => {}
+    removeCred: () => {},
 });
 
 export default AuthContext;
