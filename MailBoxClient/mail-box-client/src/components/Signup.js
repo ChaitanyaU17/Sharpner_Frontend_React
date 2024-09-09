@@ -55,53 +55,54 @@ const SignUp = () => {
   };
 
   return (
-    <Container className="border border-5 w-25 rounded-3 border-secondary mt-3">
-      <h2 style={{ textAlign: "center" }}>SignUp</h2>
-      <form
-        style={{ textAlign: "center" }}
-        className="border border-secondary rounded-4"
-        onSubmit={submitHandler}
-      >
-        <label htmlFor="email" className="my-1">
-          Email
-        </label>
-        <br />
-        <input
-          type="email"
-          id="email"
-          ref={emailRef}
-          placeholder="Email"
-          required
-        />
-        <br />
-        <label htmlFor="password" className="my-1">
-          Password
-        </label>
-        <br />
-        <input
-          type="password"
-          id="password"
-          ref={passwordRef}
-          placeholder="Password"
-          required
-        />
-        <br />
-        <label htmlFor="confirmPassword" className="my-1">
-          Confirm Password
-        </label>
-        <br />
-        <input
-          type="password"
-          id="confirmPassword"
-          ref={confirmPasswordRef}
-          placeholder="Confirm Password"
-          required
-        />
-        <br />
-        <Button type="submit" className="my-3">
-          Sign Up
-        </Button>
-      </form>
+    <Container className="mt-3">
+      <h2 className="text-center">SignUp</h2>
+      <div className="d-flex justify-content-center">
+        <form className="shadow-lg rounded-4 w-50 p-5" onSubmit={submitHandler}>
+          <div className="mb-3">
+            <label htmlFor="email" className="form-label">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              ref={emailRef}
+              className="form-control"
+              placeholder="Email"
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="password" className="form-label">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              ref={passwordRef}
+              className="form-control"
+              placeholder="Password"
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="confirmPassword" className="form-label">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              id="confirmPassword"
+              ref={confirmPasswordRef}
+              className="form-control"
+              placeholder="Confirm Password"
+              required
+            />
+          </div>
+          <Button type="submit" variant='secondary' className="w-100 my-3">
+            Sign Up
+          </Button>
+        </form>
+      </div>
     </Container>
   );
 };
