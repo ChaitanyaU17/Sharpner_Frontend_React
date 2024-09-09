@@ -40,10 +40,10 @@ const InboxMail = () => {
   };
 
   return (
-    <Container>
+    <Container className="p-5">
       <ListGroup>
-        <ListGroup.Item>From: {mail[1].from}</ListGroup.Item>
-        <ListGroup.Item>Subject: {mail[1].header}</ListGroup.Item>
+        <ListGroup.Item><b>From:</b> {mail[1].from}</ListGroup.Item>
+        <ListGroup.Item><b>Subject:</b> {mail[1].header}</ListGroup.Item>
         <ListGroup.Item>
           <Editor
             toolbarHidden
@@ -52,7 +52,7 @@ const InboxMail = () => {
           />
         </ListGroup.Item>
       </ListGroup>
-      <div style={{ textAlign: "center" }}>
+      <div className="text-center">
         <Link to="/inbox">Back to Inbox</Link>
       </div>
     </Container>

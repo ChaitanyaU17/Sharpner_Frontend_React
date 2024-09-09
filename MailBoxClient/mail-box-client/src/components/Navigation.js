@@ -1,8 +1,7 @@
 import React from "react";
 import { Navbar, Container, Badge, ListGroup } from "react-bootstrap";
-
+import { FiEdit3 } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
-// import InboxContext from "../store/inbox-context";
 import { useSelector } from "react-redux";
 
 const NavBar = () => {
@@ -22,12 +21,14 @@ const NavBar = () => {
           <ListGroup.Item variant="info">
             <NavLink
               style={(isActive) => ({
-                color: isActive ? "black" : "red",
+                color: isActive ? "black" : "green",
                 textDecoration: "inherit",
               })}
               to="/composeMail"
+              
             >
-              Compose Mail
+              <FiEdit3  />
+              <span className='px-2'>Compose Mail</span>
             </NavLink>
           </ListGroup.Item>
           <ListGroup.Item variant="light">

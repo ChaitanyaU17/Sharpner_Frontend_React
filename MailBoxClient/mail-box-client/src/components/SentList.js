@@ -1,5 +1,4 @@
 import React from "react";
-
 import { ListGroup, Button, Container } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 // import SentContext from "../store/sent-context";
@@ -44,32 +43,33 @@ const SentList = () => {
 
   return (
     <>
-      <h2 style={{ textAlign: "center" }}>Sent</h2>
-      <Container>
-        <ListGroup style={{ textAlign: "center" }}>
+      <h2 className="text-center">Sent</h2>
+      <Container >
+        <ListGroup className="text-center">
           {mails.map((item) => {
             try {
               return (
-                <ListGroup.Item key={item[0]}>
+                <ListGroup.Item key={item[0]} className="border-0">
                   <NavLink
-                    style={{ textDecoration: "inherit" }}
+                    style={{ textDecoration: "inherit"  }}
                     to={`sent/${item[0]}`}
+                  
                   >
-                    <ListGroup>
+                    <ListGroup className="shadow-lg">
                       <ListGroup.Item variant="primary">
-                        To:{" "}
+                        <b>To:</b>{" "}
                         {item[1].to.map((item) => (
                           <span>{item} </span>
                         ))}
                       </ListGroup.Item>
                       <ListGroup.Item>
-                        Subject: {item[1].header}{" "}
+                        <b>Subject:</b> {item[1].header}{" "}
                       </ListGroup.Item>
                     </ListGroup>
                   </NavLink>
                   <ListGroup.Item>
                     <Button
-                      className="position-relative end-0"
+                      className="position-relative end-0 btn-danger"
                       onClick={deleteMailHandler.bind(null, item[0])}
                     >
                       Delete

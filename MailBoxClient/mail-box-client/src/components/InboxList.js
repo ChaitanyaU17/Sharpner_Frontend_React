@@ -56,29 +56,29 @@ const InboxList = () => {
 
   return (
     <>
-      <h2 style={{ textAlign: "center" }}>Inbox</h2>
+      <h2 className="text-center">Inbox</h2>
       <Container>
-        <ListGroup style={{ textAlign: "center" }}>
+        <ListGroup className="text-center">
           {mails.map((item) => {
             try {
               return (
-                <ListGroup.Item key={item[0]}>
+                <ListGroup.Item key={item[0]} className="border-0">
                   <NavLink
                     style={{ textDecoration: "inherit" }}
                     to={`inbox/${item[0]}`}
                   >
-                    <ListGroup>
+                    <ListGroup className="shadow-lg">
                       <ListGroup.Item variant="primary">
-                        {unreadBadge(item[1].read)} From: {item[1].from}
+                        {unreadBadge(item[1].read)} <b>From:</b> {item[1].from}
                       </ListGroup.Item>
                       <ListGroup.Item>
-                        Subject: {item[1].header}{" "}
+                        <b>Subject:</b> {item[1].header}{" "}
                       </ListGroup.Item>
                     </ListGroup>
                   </NavLink>
                   <ListGroup.Item>
                     <Button
-                      className="position-relative end-0"
+                      className="position-relative end-0 btn-danger"
                       onClick={deleteMailHandler.bind(null, item[0])}
                     >
                       Delete

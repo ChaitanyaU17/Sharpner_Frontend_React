@@ -24,7 +24,7 @@ const HomePage = () => {
   
   return (
     <React.Fragment>
-      <h1>Welcome to your Mail Box!</h1>
+      <h1 className="p-2">Welcome to your Mail Box!</h1>
       <Container>
         <Row>
           <Col>

@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-
+import React, { useRef, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
-import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
+import { EditorState, convertToRaw } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { Button, Container } from "react-bootstrap";
 import { useDispatch } from "react-redux";
@@ -82,24 +81,18 @@ const ComposeEmail = () => {
 
   };
 
-    // const contentState = convertFromRaw(
-    //   convertToRaw(editorState.getCurrentContent())
-    // );
-    // const editorState1 = EditorState.createWithContent(contentState);
-
   return (
     <form
-      className="my-3"
-      style={{ textAlign: "center" }}
+      className="my-3 text-center"
       onSubmit={submitHandler}
     >
-      {/* <Editor toolbarHidden editorState={editorState1} readOnly={true} /> */}
       <label htmlFor="to" className="mx-2">
         To:
       </label>
       <input
         type="text"
         id="to"
+        className="p-1"
         placeholder="Recipients"
         ref={toRef}
         required
@@ -112,20 +105,21 @@ const ComposeEmail = () => {
         rows="1"
         cols="50"
         placeholder="Subject"
-        className="my-2"
+        className="my-2 p-1"
         ref={subjectRef}
       />
       <br />
-      <Container>
+      <Container className="shadow-lg p-3 rounded-3">
       <Editor
         editorState={editorState}
         onEditorStateChange={setEditorState}
         wrapperClassName="wrapper-class"
         editorClassName="editor-class"
         toolbarClassName="toolbar-class"
+        placeholder="type your message"
       />
       </Container>
-      <Button type="submit">Send</Button>
+      <Button type="submit" variant="secondary" className="mt-2" >Send</Button>
     </form>
   );
 };

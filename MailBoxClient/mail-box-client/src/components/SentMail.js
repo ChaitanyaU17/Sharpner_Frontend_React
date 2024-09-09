@@ -25,14 +25,14 @@ const SentMail = () => {
 
   return (
     <Container>
-      <ListGroup>
+      <ListGroup className="p-5">
         <ListGroup.Item>
-          To:{" "}
+          <b>To:</b>{" "}
           {mail[1].to.map((item) => (
             <span>{item} </span>
           ))}
         </ListGroup.Item>
-        <ListGroup.Item>Subject: {mail[1].header}</ListGroup.Item>
+        <ListGroup.Item><b>Subject:</b> {mail[1].header}</ListGroup.Item>
         <ListGroup.Item>
           <Editor
             toolbarHidden
