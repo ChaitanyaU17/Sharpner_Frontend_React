@@ -49,45 +49,45 @@ const LogIn = () => {
   };
 
   return (
-    <Container className="border border-5 w-25 rounded-3 border-secondary mt-3">
-      <h2 style={{ textAlign: "center" }}>LogIn</h2>
-      <form
-        style={{ textAlign: "center" }}
-        className="border border-secondary rounded-4"
-        onSubmit={submitHandler}
-      >
-        <label htmlFor="email" className="my-1">
-          Email
-        </label>
-        <br />
-        <input
-          type="email"
-          id="email"
-          ref={emailRef}
-          placeholder="Email"
-          required
-        />
-        <br />
-        <label htmlFor="password" className="my-1">
-          Password
-        </label>
-        <br />
-        <input
-          type="password"
-          id="password"
-          ref={passwordRef}
-          placeholder="Password"
-          required
-        />
-        <br />
-        {loading ? (
-          <p className="my-1">Loading...</p>
-        ) : (
-          <Button type="submit" className="my-1">
-            LogIn
-          </Button>
-        )}
-      </form>
+    <Container className="mt-3">
+      <h2 className="text-center">LogIn</h2>
+      <div className="d-flex justify-content-center">
+        <form className="rounded-4 shadow-lg p-5 w-50" onSubmit={submitHandler}>
+          <label htmlFor="email" className="my-1">
+            Email
+          </label>
+          <br />
+          <input
+            type="email"
+            id="email"
+            className="form-control"
+            ref={emailRef}
+            placeholder="Email"
+            required
+          />
+          <br />
+          <label htmlFor="password" className="my-1">
+            Password
+          </label>
+          <br />
+          <input
+            type="password"
+            id="password"
+            className="form-control"
+            ref={passwordRef}
+            placeholder="Password"
+            required
+          />
+          <br />
+          {loading ? (
+            <p className="my-1">Loading...</p>
+          ) : (
+            <Button type="submit" variant="secondary" className="my-1 w-100">
+              LogIn
+            </Button>
+          )}
+        </form>
+      </div>
     </Container>
   );
 };
