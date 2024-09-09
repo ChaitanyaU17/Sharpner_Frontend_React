@@ -25,7 +25,7 @@ function App() {
   return (
     <React.Fragment>
       <div className="position-absolute top-0 end-0">
-        {authCtx.idToken && <Button onClick={logoutHandler}>Logout</Button>}
+        {authCtx.idToken && <Button variant="secondary" className="m-3" onClick={logoutHandler}>Logout</Button>}
       </div>
       <Switch>
         <Route path="/test">
