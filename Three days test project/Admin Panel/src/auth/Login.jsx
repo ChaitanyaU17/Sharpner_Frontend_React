@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const loginUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBM6iwWRs8F6wTNcCXCsX8P97vDVsxiTMY`;
+const loginUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBqGXglsLCNKz8_ovTrZjtE_66ccW8GjCs`;
 
 const Login = () => {
   const [email, setEmail] = useState("");
