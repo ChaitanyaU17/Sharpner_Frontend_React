@@ -42,7 +42,7 @@ const Header = () => {
         />
         <button
           type="submit"
-          className="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-r-md"
+          className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-r-md"
         >
           Search
         </button>
