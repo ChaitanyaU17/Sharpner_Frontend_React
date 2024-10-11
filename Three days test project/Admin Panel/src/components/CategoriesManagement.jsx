@@ -94,7 +94,7 @@ const CategoriesManagement = () => {
           <div key={id} className="bg-gray-100 shadow-lg p-4 rounded-lg w-[250px]">
             <img src={category.image} alt='' className="h-36 w-52" />
             <p className="text-xl font-semibold my-2">{category.name}</p>
-            <button className="bg-blue-400 p-2 rounded-lg px-4 mr-4" onClick={() => handleEditCategory(id, category)}>Edit</button>
+            <button className="bg-blue-400 p-2 rounded-lg px-4 mr-4 hover:cursor-pointer" onClick={() => handleEditCategory(id, category)}>Edit</button>
             <button className="bg-blue-400 p-2 rounded-lg px-4" onClick={() => handleDeleteCategory(id)}>Delete</button>
           </div>
         ))}
